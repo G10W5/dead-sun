@@ -1,0 +1,14 @@
+{
+    "item.deadsun.loot_bag": "Loot Bag",
+    "item.deadsun.loot_bag.desc": "Right-click to open for random loot",
+    "config.deadsun.title": "Dead Sun Config",
+    "config.deadsun.general": "General",
+    "config.deadsun.torchRadius": "Torch Safety Radius",
+    "config.deadsun.torchRadius.tooltip": "How many blocks around a torch is safe from zombie spawns",
+    "config.deadsun.lootBagDropChance": "Loot Bag Drop Chance",
+    "config.deadsun.lootBagDropChance.tooltip": "Chance for zombies to drop a loot bag (0.0 - 1.0)",
+    "config.deadsun.spawnDensity": "Spawn Density",
+    "config.deadsun.spawnDensity.tooltip": "Multiplier for zombie spawn rate",
+    "config.deadsun.enderPearlChance": "Ender Pearl Chance (End Loot)",
+    "config.deadsun.enderPearlChance.tooltip": "Chance to get ender pearls from an End loot bag (0.0 - 1.0)"
+}

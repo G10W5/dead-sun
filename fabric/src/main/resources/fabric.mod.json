@@ -1,0 +1,26 @@
+{
+    "schemaVersion": 1,
+    "id": "deadsun",
+    "version": "${version}",
+    "name": "Dead Sun",
+    "description": "Hardcore daytime zombie survival with torch safety mechanics.",
+    "authors": ["DeadSun"],
+    "license": "MIT",
+    "icon": "assets/deadsun/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": ["com.example.deadsun.fabric.DeadSunFabric"],
+        "modmenu": ["com.example.deadsun.fabric.ModMenuIntegration"]
+    },
+    "mixins": ["deadsun.mixins.json"],
+    "depends": {
+        "fabricloader": ">=0.19.3",
+        "minecraft": ">=26.2",
+        "java": ">=25",
+        "fabric-api": "*"
+    },
+    "suggests": {
+        "cloth-config2": "*",
+        "modmenu": "*"
+    }
+}

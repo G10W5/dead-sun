@@ -1,0 +1,57 @@
+plugins {
+    id 'dev.architectury.loom-no-remap' version "${loom_version}" apply false
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
+    id 'io.github.pacifistmc.forgix' version '2.0.0-SNAPSHOT.5.1'
+    id 'maven-publish'
+}
+
+architectury {
+    minecraft = rootProject.minecraft_version
+}
+
+subprojects {
+    apply plugin: 'maven-publish'
+    apply plugin: 'java'
+
+    version = rootProject.mod_version
+    group = rootProject.maven_group
+
+    base {
+        archivesName = rootProject.archives_base_name
+    }
+
+    repositories {
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://libraries.minecraft.net/" }
+        mavenCentral()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.encoding = 'UTF-8'
+        it.options.release = 25
+    }
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
+    }
+
+    afterEvaluate {
+        build.finalizedBy(rootProject.tasks.named("mergeJars"))
+    }
+}
+
+afterEvaluate {
+    forgix {
+        destinationDirectory = layout.projectDirectory.dir("build/universal")
+        archiveClassifier = "universal"
+        archiveVersion = project.mod_version
+
+        fabric()
+        neoforge {
+            inputJar.set(layout.projectDirectory.file("neoforge/build/libs/${rootProject.archives_base_name}-${rootProject.mod_version}.jar"))
+        }
+    }
+}

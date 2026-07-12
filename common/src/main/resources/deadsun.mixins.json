@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "package": "com.example.deadsun.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "NaturalSpawnerMixin",
+        "MobSpawnMixin",
+        "MobSunMixin",
+        "LivingEntityMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
