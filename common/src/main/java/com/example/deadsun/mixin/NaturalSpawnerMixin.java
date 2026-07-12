@@ -1,6 +1,5 @@
 package com.example.deadsun.mixin;
 
-import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -12,8 +11,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.MobSpawnSettings;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -62,17 +59,25 @@ public abstract class NaturalSpawnerMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void deadsun$forceSurfaceSpawn(
+    private static void deadsun$positionOverride(
             Level level, LevelChunk chunk,
             CallbackInfoReturnable<BlockPos> cir
     ) {
         if (level.dimension() == Level.NETHER) return;
 
         ChunkPos chunkPos = chunk.getPos();
-        int x = chunkPos.getMinBlockX() + level.getRandom().nextInt(16);
-        int z = chunkPos.getMinBlockZ() + level.getRandom().nextInt(16);
-        int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) + 1;
-        cir.setReturnValue(new BlockPos(x, y, z));
+        RandomSource random = level.getRandom();
+        int x = chunkPos.getMinBlockX() + random.nextInt(16);
+        int z = chunkPos.getMinBlockZ() + random.nextInt(16);
+        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+
+        if (random.nextBoolean()) {
+            cir.setReturnValue(new BlockPos(x, surfaceY + 1, z));
+        } else {
+            int minY = chunk.getMinY();
+            int caveY = minY + random.nextInt(Math.max(1, surfaceY - minY));
+            cir.setReturnValue(new BlockPos(x, caveY, z));
+        }
     }
 
     @Inject(
