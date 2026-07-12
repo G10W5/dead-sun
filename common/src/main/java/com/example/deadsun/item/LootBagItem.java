@@ -1,7 +1,9 @@
 package com.example.deadsun.item;
 
 import com.example.deadsun.config.ModConfig;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -26,11 +28,14 @@ public class LootBagItem extends Item {
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
             boolean isEnd = level.dimension() == Level.END;
             ItemStack reward = rollReward(serverLevel.getRandom(), isEnd);
+
+            MutableComponent name = Component.literal(reward.getHoverName().getString())
+                    .withStyle(ChatFormatting.GREEN);
+            player.sendOverlayMessage(
+                    Component.literal("You found ").append(name).append("!"));
+
             player.getInventory().add(reward);
             stack.shrink(1);
-
-            player.sendOverlayMessage(
-                    Component.literal("You found " + reward.getHoverName().getString() + "!"));
 
             level.playSound(null,
                     player.getX(), player.getY(), player.getZ(),
