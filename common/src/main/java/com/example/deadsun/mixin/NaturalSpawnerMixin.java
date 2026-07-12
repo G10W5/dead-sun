@@ -47,6 +47,7 @@ public abstract class NaturalSpawnerMixin {
     ) {
         Optional<MobSpawnSettings.SpawnerData> original = cir.getReturnValue();
         if (original.isEmpty()) return;
+        if (category != MobCategory.MONSTER) return;
 
         MobSpawnSettings.SpawnerData data = original.get();
         EntityType<?> entityType = data.type();
