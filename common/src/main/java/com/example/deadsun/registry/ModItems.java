@@ -11,7 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 
 public class ModItems {
     public static final Item LOOT_BAG = register("loot_bag",
-            props -> new LootBagItem(props.durability(1)));
+            props -> new LootBagItem(props.stacksTo(16)));
 
     private static Item register(String name, java.util.function.Function<Item.Properties, Item> factory) {
         ResourceKey<Item> key = ResourceKey.create(

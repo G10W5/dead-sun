@@ -1,7 +1,10 @@
 package com.example.deadsun.item;
 
 import com.example.deadsun.config.ModConfig;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +28,14 @@ public class LootBagItem extends Item {
             ItemStack reward = rollReward(serverLevel.getRandom(), isEnd);
             player.getInventory().add(reward);
             stack.shrink(1);
+
+            player.sendOverlayMessage(
+                    Component.literal("You found " + reward.getHoverName().getString() + "!"));
+
+            level.playSound(null,
+                    player.getX(), player.getY(), player.getZ(),
+                    SoundEvents.BUNDLE_DROP_CONTENTS,
+                    SoundSource.PLAYERS, 1.0f, 1.0f);
         }
 
         return InteractionResult.SUCCESS;
