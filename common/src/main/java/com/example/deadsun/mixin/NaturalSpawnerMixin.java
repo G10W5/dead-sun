@@ -36,7 +36,8 @@ public abstract class NaturalSpawnerMixin {
 
     @Inject(
             method = "getRandomSpawnMobAt",
-            at = @At("RETURN")
+            at = @At("RETURN"),
+            cancellable = true
     )
     private static void deadsun$filterSpawns(
             ServerLevel level, StructureManager structureManager,
