@@ -11,11 +11,13 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.util.RandomSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,9 +35,9 @@ public abstract class NaturalSpawnerMixin {
 
     @Shadow
     private static boolean canSpawnMobAt(
-            net.minecraft.server.level.ServerLevel level,
+            ServerLevel level,
             net.minecraft.world.level.StructureManager structureManager,
-            net.minecraft.world.level.chunk.ChunkGenerator chunkGenerator,
+            ChunkGenerator chunkGenerator,
             MobCategory category,
             MobSpawnSettings.SpawnerData spawnerData,
             BlockPos pos) {
@@ -43,7 +45,7 @@ public abstract class NaturalSpawnerMixin {
     }
 
     @Unique
-    private static EntityType<?> deadsun$entity(ResourceKey<net.minecraft.world.entity.EntityType<?>> key) {
+    private static EntityType<?> deadsun$entity(ResourceKey<EntityType<?>> key) {
         return BuiltInRegistries.ENTITY_TYPE.getValue(key.identifier());
     }
 
@@ -53,6 +55,24 @@ public abstract class NaturalSpawnerMixin {
                 || type == deadsun$entity(EntityTypeIds.HUSK)
                 || type == deadsun$entity(EntityTypeIds.DROWNED)
                 || type == deadsun$entity(EntityTypeIds.ZOMBIE_VILLAGER);
+    }
+
+    @Inject(
+            method = "getRandomPosWithin",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private static void deadsun$forceSurfaceSpawn(
+            Level level, LevelChunk chunk,
+            CallbackInfoReturnable<BlockPos> cir
+    ) {
+        if (level.dimension() == Level.NETHER) return;
+
+        ChunkPos chunkPos = chunk.getPos();
+        int x = chunkPos.getMinBlockX() + level.getRandom().nextInt(16);
+        int z = chunkPos.getMinBlockZ() + level.getRandom().nextInt(16);
+        int y = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z) + 1;
+        cir.setReturnValue(new BlockPos(x, y, z));
     }
 
     @Inject(
@@ -72,7 +92,6 @@ public abstract class NaturalSpawnerMixin {
 
         MobSpawnSettings.SpawnerData data = original.get();
         EntityType<?> entityType = data.type();
-        ResourceKey<Level> dimension = level.dimension();
         EntityType<?> zombieType = deadsun$entity(EntityTypeIds.ZOMBIE);
 
         if (!deadsun$isZombieVariant(entityType)) {
@@ -89,9 +108,9 @@ public abstract class NaturalSpawnerMixin {
             )
     )
     private static boolean deadsun$bypassCanSpawnMobAt(
-            net.minecraft.server.level.ServerLevel level,
+            ServerLevel level,
             net.minecraft.world.level.StructureManager structureManager,
-            net.minecraft.world.level.chunk.ChunkGenerator chunkGenerator,
+            ChunkGenerator chunkGenerator,
             MobCategory category,
             MobSpawnSettings.SpawnerData spawnerData,
             BlockPos pos
