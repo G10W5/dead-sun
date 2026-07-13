@@ -58,6 +58,10 @@ public class ZombieSpawnHandler {
     }
 
     private static BlockPos findSpawnPosition(ServerLevel level, ServerPlayer player, int maxDist, int minDist) {
+        BlockPos playerPos = player.blockPosition();
+        boolean playerOnSurface = level.canSeeSky(playerPos.above());
+        boolean isEnd = level.dimension() == net.minecraft.world.level.Level.END;
+
         for (int attempt = 0; attempt < 16; attempt++) {
             double angle = level.getRandom().nextDouble() * Math.PI * 2;
             double dist = minDist + level.getRandom().nextDouble() * (maxDist - minDist);
@@ -67,7 +71,10 @@ public class ZombieSpawnHandler {
             int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             int minY = level.getMinY();
             int y;
-            if (level.getRandom().nextBoolean()) {
+
+            if (isEnd) {
+                y = surfaceY + 1;
+            } else if (playerOnSurface) {
                 y = surfaceY + 1;
             } else {
                 y = minY + level.getRandom().nextInt(Math.max(1, surfaceY - minY));
@@ -75,6 +82,7 @@ public class ZombieSpawnHandler {
 
             BlockPos pos = new BlockPos(x, y, z);
 
+            if (isEnd && !level.canSeeSky(pos)) continue;
             if (!isValidSpawnPos(level, pos)) continue;
             if (!checkBlockLight(level, pos)) continue;
             if (isNearbyTorch(level, pos)) continue;

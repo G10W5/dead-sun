@@ -60,7 +60,7 @@ public class LootBagItem extends Item {
         } else if (roll < 0.50f) {
             return new ItemStack(Items.BONE, random.nextIntBetweenInclusive(1, 3));
         } else if (roll < 0.75f) {
-            return new ItemStack(Items.BOW);
+            return new ItemStack(Items.STRING, random.nextIntBetweenInclusive(2, 4));
         } else if (roll < 0.90f) {
             return new ItemStack(Items.SPIDER_EYE, random.nextIntBetweenInclusive(1, 2));
         } else {

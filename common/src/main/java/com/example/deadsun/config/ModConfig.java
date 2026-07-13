@@ -14,13 +14,16 @@ public class ModConfig {
 
     private int torchRadius = 8;
     private float lootBagDropChance = 0.05f;
-    private int spawnDensity = 1;
+    private int spawnDensity = 5;
     private float enderPearlChance = 0.30f;
     private int spawnRadius = 32;
     private int minSpawnDistance = 24;
     private int ticksBetweenSpawns = 10;
     private int maxBlockLight = -1;
     private boolean requireOpenSky = false;
+    private boolean zombieLeap = true;
+    private float leapStrength = 0.6f;
+    private float leapHeight = 0.5f;
 
     public int getTorchRadius() {
         return torchRadius;
@@ -125,4 +128,12 @@ public class ModConfig {
     public static int getTicksBetweenSpawnsValue() { return INSTANCE.getTicksBetweenSpawns(); }
     public static int getMaxBlockLightValue() { return INSTANCE.getMaxBlockLight(); }
     public static boolean isRequireOpenSkyValue() { return INSTANCE.isRequireOpenSky(); }
+
+    public boolean isZombieLeap() { return zombieLeap; }
+    public float getLeapStrength() { return leapStrength; }
+    public float getLeapHeight() { return leapHeight; }
+
+    public static boolean isZombieLeapValue() { return INSTANCE.isZombieLeap(); }
+    public static float getLeapStrengthValue() { return INSTANCE.getLeapStrength(); }
+    public static float getLeapHeightValue() { return INSTANCE.getLeapHeight(); }
 }
