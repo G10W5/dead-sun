@@ -68,8 +68,11 @@ public class ConfigScreenBuilder {
         // === Subcategory: Loot ===
         SubCategoryBuilder lootSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.loot"));
         lootSub.add(entry.startFloatField(Component.translatable("config.deadsun.lootBagDropChance"), config.getLootBagDropChance())
-                .setDefaultValue(0.05f).setMin(0.0f).setMax(1.0f).setSaveConsumer(config::setLootBagDropChance)
+                .setDefaultValue(0.25f).setMin(0.0f).setMax(1.0f).setSaveConsumer(config::setLootBagDropChance)
                 .setTooltip(Component.translatable("config.deadsun.lootBagDropChance.tooltip")).build());
+        lootSub.add(entry.startFloatField(Component.translatable("config.deadsun.enderPearlDropChance"), config.getEnderPearlDropChance())
+                .setDefaultValue(0.02f).setMin(0.0f).setMax(1.0f).setSaveConsumer(config::setEnderPearlDropChance)
+                .setTooltip(Component.translatable("config.deadsun.enderPearlDropChance.tooltip")).build());
         lootSub.add(entry.startFloatField(Component.translatable("config.deadsun.enderPearlChance"), config.getEnderPearlChance())
                 .setDefaultValue(0.30f).setMin(0.0f).setMax(1.0f).setSaveConsumer(config::setEnderPearlChance)
                 .setTooltip(Component.translatable("config.deadsun.enderPearlChance.tooltip")).build());

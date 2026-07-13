@@ -14,7 +14,8 @@ public class ModConfig {
 
     // --- Existing fields ---
     private int torchRadius = 8;
-    private float lootBagDropChance = 0.05f;
+    private float lootBagDropChance = 0.25f;
+    private float enderPearlDropChance = 0.02f;
     private int spawnDensity = 50;
     private float enderPearlChance = 0.30f;
     private int spawnRadius = 128;
@@ -61,6 +62,7 @@ public class ModConfig {
     // --- Existing getters ---
     public int getTorchRadius() { return torchRadius; }
     public float getLootBagDropChance() { return lootBagDropChance; }
+    public float getEnderPearlDropChance() { return enderPearlDropChance; }
     public int getSpawnDensity() { return spawnDensity; }
     public float getEnderPearlChance() { return enderPearlChance; }
     public int getSpawnRadius() { return spawnRadius; }
@@ -99,6 +101,7 @@ public class ModConfig {
     // --- Existing setters ---
     public void setTorchRadius(int v) { this.torchRadius = v; }
     public void setLootBagDropChance(float v) { this.lootBagDropChance = v; }
+    public void setEnderPearlDropChance(float v) { this.enderPearlDropChance = v; }
     public void setSpawnDensity(int v) { this.spawnDensity = v; }
     public void setEnderPearlChance(float v) { this.enderPearlChance = v; }
     public void setSpawnRadius(int v) { this.spawnRadius = v; }
@@ -143,6 +146,7 @@ public class ModConfig {
     public static boolean isRequireOpenSkyValue() { return INSTANCE.requireOpenSky; }
     public static int getTorchRadiusValue() { return INSTANCE.torchRadius; }
     public static float getLootBagDropChanceValue() { return INSTANCE.lootBagDropChance; }
+    public static float getEnderPearlDropChanceValue() { return INSTANCE.enderPearlDropChance; }
     public static float getEnderPearlChanceValue() { return INSTANCE.enderPearlChance; }
     public static boolean isZombieLeapValue() { return INSTANCE.zombieLeap; }
     public static boolean isZombiePileUpValue() { return INSTANCE.zombiePileUp; }

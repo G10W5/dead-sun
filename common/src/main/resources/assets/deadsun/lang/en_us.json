@@ -17,6 +17,8 @@
     "config.deadsun.torchRadius.tooltip": "How many blocks around a torch is safe from zombie spawns",
     "config.deadsun.lootBagDropChance": "Loot Bag Drop Chance",
     "config.deadsun.lootBagDropChance.tooltip": "Chance for zombies to drop a loot bag (0.0 - 1.0)",
+    "config.deadsun.enderPearlDropChance": "Ender Pearl Drop Chance (Zombies)",
+    "config.deadsun.enderPearlDropChance.tooltip": "Chance for zombies to drop an ender pearl on death (0.0 - 1.0)",
     "config.deadsun.spawnDensity": "Max Zombies Per Player",
     "config.deadsun.spawnDensity.tooltip": "Maximum zombies that can exist near a player at once",
     "config.deadsun.spawnRadius": "Spawn Radius",

@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -20,9 +21,14 @@ public abstract class LivingEntityMixin {
 
         LivingEntity self = (LivingEntity) (Object) this;
         if (self instanceof Zombie) {
-            float chance = ModConfig.getLootBagDropChanceValue();
-            if (level.getRandom().nextFloat() < chance) {
+            float lootChance = ModConfig.getLootBagDropChanceValue();
+            if (level.getRandom().nextFloat() < lootChance) {
                 self.spawnAtLocation(level, ModItems.LOOT_BAG);
+            }
+
+            float pearlChance = ModConfig.getEnderPearlDropChanceValue();
+            if (level.getRandom().nextFloat() < pearlChance) {
+                self.spawnAtLocation(level, Items.ENDER_PEARL);
             }
         }
     }
