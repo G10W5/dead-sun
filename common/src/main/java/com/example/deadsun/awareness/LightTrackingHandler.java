@@ -40,6 +40,8 @@ public class LightTrackingHandler {
                 if (!zombie.onGround()) continue;
                 if (level.getRandom().nextInt(5) != 0) continue;
 
+                if (level.getRandom().nextInt(4) != 0) continue;
+
                 tryPathToLight(level, zombie, range);
             }
         }
@@ -52,6 +54,8 @@ public class LightTrackingHandler {
 
         if (level.getRandom().nextInt(40) != 0) return;
         if (!zombie.onGround()) return;
+
+        if (level.getRandom().nextInt(4) != 0) return;
 
         int range = ModConfig.getLightSearchRangeValue();
         tryPathToLight(level, zombie, range);

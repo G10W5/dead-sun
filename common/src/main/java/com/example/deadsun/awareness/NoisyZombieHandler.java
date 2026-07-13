@@ -30,9 +30,8 @@ public class NoisyZombieHandler {
         ServerPlayer nearest = (ServerPlayer) level.getNearestPlayer(zombie, 12.0);
         if (nearest == null) return;
         if (nearest.isCreative() || nearest.isSpectator()) return;
-        if (nearest.isCrouching()) return;
 
-        if (!zombie.hasLineOfSight(nearest)) return;
+        if (nearest.isCrouching() && !zombie.hasLineOfSight(nearest)) return;
 
         LAST_CALL_TIME.put(entityId, now);
 

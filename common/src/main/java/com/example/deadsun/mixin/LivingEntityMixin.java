@@ -1,5 +1,6 @@
 package com.example.deadsun.mixin;
 
+import com.example.deadsun.awareness.AlphaZombieHandler;
 import com.example.deadsun.config.ModConfig;
 import com.example.deadsun.registry.ModItems;
 import net.minecraft.server.level.ServerLevel;
@@ -20,15 +21,29 @@ public abstract class LivingEntityMixin {
         if (!isFeaturesActive(level)) return;
 
         LivingEntity self = (LivingEntity) (Object) this;
-        if (self instanceof Zombie) {
-            float lootChance = ModConfig.getLootBagDropChanceValue();
-            if (level.getRandom().nextFloat() < lootChance) {
+        if (self instanceof Zombie zombie) {
+            if (AlphaZombieHandler.isAlpha(zombie)) {
                 self.spawnAtLocation(level, ModItems.LOOT_BAG);
-            }
-
-            float pearlChance = ModConfig.getEnderPearlDropChanceValue();
-            if (level.getRandom().nextFloat() < pearlChance) {
                 self.spawnAtLocation(level, Items.ENDER_PEARL);
+                if (level.getRandom().nextFloat() < 0.5f) {
+                    self.spawnAtLocation(level, Items.GOLD_INGOT);
+                }
+                if (level.getRandom().nextFloat() < 0.1f) {
+                    self.spawnAtLocation(level, Items.DIAMOND);
+                }
+                for (int i = 0; i < 3 + level.getRandom().nextInt(3); i++) {
+                    self.spawnAtLocation(level, Items.EXPERIENCE_BOTTLE);
+                }
+            } else {
+                float lootChance = ModConfig.getLootBagDropChanceValue();
+                if (level.getRandom().nextFloat() < lootChance) {
+                    self.spawnAtLocation(level, ModItems.LOOT_BAG);
+                }
+
+                float pearlChance = ModConfig.getEnderPearlDropChanceValue();
+                if (level.getRandom().nextFloat() < pearlChance) {
+                    self.spawnAtLocation(level, Items.ENDER_PEARL);
+                }
             }
         }
     }

@@ -59,6 +59,13 @@ public class ModConfig {
     private int noisyZombieRange = 24;
     private int noisyZombieCooldown = 200;
 
+    // --- New fields: Alpha Zombies ---
+    private boolean alphaZombies = true;
+    private float alphaSpawnChance = 0.02f;
+    private int alphaHealth = 60;
+    private float alphaScale = 1.5f;
+    private float alphaAttackDamage = 5.0f;
+
     // --- Existing getters ---
     public int getTorchRadius() { return torchRadius; }
     public float getLootBagDropChance() { return lootBagDropChance; }
@@ -97,6 +104,11 @@ public class ModConfig {
     public boolean isNoisyZombies() { return noisyZombies; }
     public int getNoisyZombieRange() { return noisyZombieRange; }
     public int getNoisyZombieCooldown() { return noisyZombieCooldown; }
+    public boolean isAlphaZombies() { return alphaZombies; }
+    public float getAlphaSpawnChance() { return alphaSpawnChance; }
+    public int getAlphaHealth() { return alphaHealth; }
+    public float getAlphaScale() { return alphaScale; }
+    public float getAlphaAttackDamage() { return alphaAttackDamage; }
 
     // --- Existing setters ---
     public void setTorchRadius(int v) { this.torchRadius = v; }
@@ -136,6 +148,11 @@ public class ModConfig {
     public void setNoisyZombies(boolean v) { this.noisyZombies = v; }
     public void setNoisyZombieRange(int v) { this.noisyZombieRange = v; }
     public void setNoisyZombieCooldown(int v) { this.noisyZombieCooldown = v; }
+    public void setAlphaZombies(boolean v) { this.alphaZombies = v; }
+    public void setAlphaSpawnChance(float v) { this.alphaSpawnChance = v; }
+    public void setAlphaHealth(int v) { this.alphaHealth = v; }
+    public void setAlphaScale(float v) { this.alphaScale = v; }
+    public void setAlphaAttackDamage(float v) { this.alphaAttackDamage = v; }
 
     // --- Existing static accessors ---
     public static int getSpawnDensityValue() { return INSTANCE.spawnDensity; }
@@ -175,6 +192,11 @@ public class ModConfig {
     public static boolean isNoisyZombiesValue() { return INSTANCE.noisyZombies; }
     public static int getNoisyZombieRangeValue() { return INSTANCE.noisyZombieRange; }
     public static int getNoisyZombieCooldownValue() { return INSTANCE.noisyZombieCooldown; }
+    public static boolean isAlphaZombiesValue() { return INSTANCE.alphaZombies; }
+    public static float getAlphaSpawnChanceValue() { return INSTANCE.alphaSpawnChance; }
+    public static int getAlphaHealthValue() { return INSTANCE.alphaHealth; }
+    public static float getAlphaScaleValue() { return INSTANCE.alphaScale; }
+    public static float getAlphaAttackDamageValue() { return INSTANCE.alphaAttackDamage; }
 
     public static ModConfig getInstance() { return INSTANCE; }
 

@@ -4,16 +4,15 @@ import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.AABB;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class HordeHandler {
 
-    private static final Map<UUID, Long> LAST_WAYPOINT_TIME = new HashMap<>();
+    private static final java.util.Map<java.util.UUID, Long> LAST_WAYPOINT_TIME = new java.util.HashMap<>();
 
     public static void tick(ServerLevel level) {
         if (!ModConfig.isWanderingHordesValue()) return;
@@ -25,8 +24,9 @@ public class HordeHandler {
         List<ServerPlayer> players = level.players();
         for (ServerPlayer player : players) {
             if (player.isSpectator()) continue;
+            if (player.isCrouching()) continue;
 
-            UUID playerId = player.getUUID();
+            java.util.UUID playerId = player.getUUID();
             Long lastTime = LAST_WAYPOINT_TIME.get(playerId);
             if (lastTime != null && now - lastTime < frequencyMs) continue;
 
@@ -40,7 +40,7 @@ public class HordeHandler {
 
         double tryX = player.getX() + (level.getRandom().nextDouble() - 0.5) * range * 2;
         double tryZ = player.getZ() + (level.getRandom().nextDouble() - 0.5) * range * 2;
-        int tryY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) tryX, (int) tryZ);
+        int tryY = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, (int) tryX, (int) tryZ);
 
         BlockPos waypoint = new BlockPos((int) tryX, tryY, (int) tryZ);
         if (!level.isLoaded(waypoint)) return;
@@ -51,9 +51,8 @@ public class HordeHandler {
                 waypoint.getX() + attractRange, waypoint.getY() + 16, waypoint.getZ() + attractRange
         );
 
-        List<net.minecraft.world.entity.monster.zombie.Zombie> zombies = level.getEntitiesOfClass(
-                net.minecraft.world.entity.monster.zombie.Zombie.class, box, e -> true);
-        for (net.minecraft.world.entity.monster.zombie.Zombie zombie : zombies) {
+        List<Zombie> zombies = level.getEntitiesOfClass(Zombie.class, box, e -> true);
+        for (Zombie zombie : zombies) {
             if (zombie.distanceTo(player) > range * 1.5) continue;
             zombie.getNavigation().moveTo(waypoint.getX() + 0.5, waypoint.getY(), waypoint.getZ() + 0.5, 1.0);
         }

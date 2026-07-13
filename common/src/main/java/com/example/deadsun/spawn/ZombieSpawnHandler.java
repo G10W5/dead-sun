@@ -1,6 +1,7 @@
 package com.example.deadsun.spawn;
 
 import com.example.deadsun.DeadSunMod;
+import com.example.deadsun.awareness.AlphaZombieHandler;
 import com.example.deadsun.awareness.HordeHandler;
 import com.example.deadsun.awareness.LightTrackingHandler;
 import com.example.deadsun.awareness.SoundTrackingHandler;
@@ -82,7 +83,6 @@ public class ZombieSpawnHandler {
         List<ServerPlayer> players = level.players();
         for (ServerPlayer player : players) {
             if (player.isSpectator()) continue;
-            if (player.isCrouching()) continue;
 
             int range = ModConfig.getSoundHearRangeValue();
             AABB box = new AABB(
@@ -92,7 +92,7 @@ public class ZombieSpawnHandler {
 
             List<Zombie> zombies = level.getEntitiesOfClass(Zombie.class, box, e -> e.getTarget() == null);
             for (Zombie zombie : zombies) {
-                if (level.getRandom().nextInt(20) != 0) continue;
+                if (level.getRandom().nextInt(40) != 0) continue;
 
                 BlockPos sound = SoundTrackingHandler.findNearestSound(level, zombie.blockPosition(), range);
                 if (sound != null) {
@@ -269,6 +269,9 @@ public class ZombieSpawnHandler {
                 EntitySpawnReason.NATURAL, null);
         if (!ModConfig.isAllowBabyZombiesValue()) {
             zombie.setBaby(false);
+        }
+        if (AlphaZombieHandler.shouldSpawnAlpha(level)) {
+            AlphaZombieHandler.markAsAlpha(zombie);
         }
         level.addFreshEntity(zombie);
     }

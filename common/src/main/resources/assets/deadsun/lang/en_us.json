@@ -13,6 +13,7 @@
     "config.deadsun.subcat.lightTracking": "Light Tracking",
     "config.deadsun.subcat.hordes": "Wandering Hordes",
     "config.deadsun.subcat.noisy": "Noisy Zombies",
+    "config.deadsun.subcat.alpha": "Alpha Zombies",
     "config.deadsun.torchRadius": "Torch Safety Radius",
     "config.deadsun.torchRadius.tooltip": "How many blocks around a torch is safe from zombie spawns",
     "config.deadsun.lootBagDropChance": "Loot Bag Drop Chance",
@@ -80,5 +81,16 @@
     "config.deadsun.noisyZombieRange": "Noisy Range",
     "config.deadsun.noisyZombieRange.tooltip": "How far the noisy zombie call attracts other zombies (in blocks)",
     "config.deadsun.noisyZombieCooldown": "Noisy Cooldown",
-    "config.deadsun.noisyZombieCooldown.tooltip": "Ticks between noisy zombie calls (20 = 1 second)"
+    "config.deadsun.noisyZombieCooldown.tooltip": "Ticks between noisy zombie calls (20 = 1 second)",
+    "config.deadsun.subcat.alpha": "Alpha Zombies",
+    "config.deadsun.alphaZombies": "Alpha Zombies",
+    "config.deadsun.alphaZombies.tooltip": "Rare enhanced zombies with more HP, damage, and size (2% spawn chance)",
+    "config.deadsun.alphaSpawnChance": "Alpha Spawn Chance",
+    "config.deadsun.alphaSpawnChance.tooltip": "Chance for a spawned zombie to be an Alpha (0.0 - 0.1)",
+    "config.deadsun.alphaHealth": "Alpha Health",
+    "config.deadsun.alphaHealth.tooltip": "Max health of Alpha Zombies (20-200)",
+    "config.deadsun.alphaScale": "Alpha Scale",
+    "config.deadsun.alphaScale.tooltip": "Size multiplier for Alpha Zombies (1.0 = normal, 1.5 = 50% bigger)",
+    "config.deadsun.alphaAttackDamage": "Alpha Attack Damage",
+    "config.deadsun.alphaAttackDamage.tooltip": "Attack damage of Alpha Zombies (3.0-20.0)"
 }

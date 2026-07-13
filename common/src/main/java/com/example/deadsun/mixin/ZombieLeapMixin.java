@@ -1,5 +1,6 @@
 package com.example.deadsun.mixin;
 
+import com.example.deadsun.awareness.AlphaZombieHandler;
 import com.example.deadsun.awareness.LightTrackingHandler;
 import com.example.deadsun.awareness.NoisyZombieHandler;
 import com.example.deadsun.config.ModConfig;
@@ -39,6 +40,7 @@ public abstract class ZombieLeapMixin {
 
         LightTrackingHandler.tick(level, self);
         NoisyZombieHandler.tick(level, self);
+        AlphaZombieHandler.tickParticles(self);
     }
 
     @Unique
@@ -51,7 +53,7 @@ public abstract class ZombieLeapMixin {
         net.minecraft.world.entity.player.Player nearest = level.getNearestPlayer(self, 8.0);
         if (!(nearest instanceof ServerPlayer target)) return;
         if (target.isCreative() || target.isSpectator()) return;
-        if (target.isCrouching()) return;
+        if (target.isCrouching() && !self.hasLineOfSight(target)) return;
 
         double dist = self.distanceTo(target);
         if (dist > 4.0 || dist < 1.5) return;

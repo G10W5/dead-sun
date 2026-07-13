@@ -163,6 +163,25 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.noisyZombieCooldown.tooltip")).build());
         general.addEntry(noisySub.build());
 
+        // === Subcategory: Alpha Zombies ===
+        SubCategoryBuilder alphaSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.alpha"));
+        alphaSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.alphaZombies"), config.isAlphaZombies())
+                .setDefaultValue(true).setSaveConsumer(config::setAlphaZombies)
+                .setTooltip(Component.translatable("config.deadsun.alphaZombies.tooltip")).build());
+        alphaSub.add(entry.startFloatField(Component.translatable("config.deadsun.alphaSpawnChance"), config.getAlphaSpawnChance())
+                .setDefaultValue(0.02f).setMin(0.0f).setMax(0.1f).setSaveConsumer(config::setAlphaSpawnChance)
+                .setTooltip(Component.translatable("config.deadsun.alphaSpawnChance.tooltip")).build());
+        alphaSub.add(entry.startIntSlider(Component.translatable("config.deadsun.alphaHealth"), config.getAlphaHealth(), 20, 200)
+                .setDefaultValue(60).setSaveConsumer(config::setAlphaHealth)
+                .setTooltip(Component.translatable("config.deadsun.alphaHealth.tooltip")).build());
+        alphaSub.add(entry.startFloatField(Component.translatable("config.deadsun.alphaScale"), config.getAlphaScale())
+                .setDefaultValue(1.5f).setMin(1.0f).setMax(3.0f).setSaveConsumer(config::setAlphaScale)
+                .setTooltip(Component.translatable("config.deadsun.alphaScale.tooltip")).build());
+        alphaSub.add(entry.startFloatField(Component.translatable("config.deadsun.alphaAttackDamage"), config.getAlphaAttackDamage())
+                .setDefaultValue(5.0f).setMin(3.0f).setMax(20.0f).setSaveConsumer(config::setAlphaAttackDamage)
+                .setTooltip(Component.translatable("config.deadsun.alphaAttackDamage.tooltip")).build());
+        general.addEntry(alphaSub.build());
+
         return builder.build();
     }
 }
