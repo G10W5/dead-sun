@@ -1,9 +1,10 @@
 package com.example.deadsun.mixin;
 
 import com.example.deadsun.config.ModConfig;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -59,31 +60,28 @@ public abstract class ZombieLeapMixin {
     private void deadsun$tryPileUp(Zombie self) {
         if (!ModConfig.isZombiePileUpValue()) return;
         if (deadsun$pileUpCooldown > 0) { deadsun$pileUpCooldown--; return; }
-        if (!self.onGround()) return;
-        if (self.getTarget() == null) return;
-        if (self.getNavigation().isInProgress()) return;
-
-        Vec3 motion = self.getDeltaMovement();
-        if (Math.abs(motion.x) > 0.05 || Math.abs(motion.z) > 0.05) return;
 
         ServerLevel level = (ServerLevel) self.level();
 
-        AABB searchBox = self.getBoundingBox().inflate(2.0, 1.0, 2.0);
+        AABB searchBox = self.getBoundingBox().inflate(0.5, 0.0, 0.5);
+        List<Zombie> overlapping = level.getEntitiesOfClass(Zombie.class, searchBox,
+                z -> z != self && z.onGround() && Math.abs(z.getX() - self.getX()) < 0.5 && Math.abs(z.getZ() - self.getZ()) < 0.5);
 
-        List<Zombie> nearby = level.getEntitiesOfClass(Zombie.class, searchBox,
-                z -> z != self && z.onGround() && z.getY() >= self.getY() - 0.5 && z.getY() <= self.getY() + 0.5);
+        if (overlapping.isEmpty()) return;
 
-        if (nearby.isEmpty()) return;
+        float rand = 0.12f + self.getRandom().nextFloat() * 0.04f;
 
-        Zombie target = nearby.get(0);
-        double newY = target.getY() + target.getBbHeight();
-        BlockPos aboveTarget = BlockPos.containing(self.getX(), newY, self.getZ());
+        self.setDeltaMovement(
+                self.getDeltaMovement().x() + (rand / 20) * (self.getRandom().nextFloat() * 2 - 1),
+                rand,
+                self.getDeltaMovement().z() + (rand / 20) * (self.getRandom().nextFloat() * 2 - 1)
+        );
+        self.fallDistance = 0;
 
-        if (!level.getBlockState(aboveTarget).blocksMotion()
-                && !level.getBlockState(aboveTarget.above()).blocksMotion()) {
-            self.setDeltaMovement(0, 0.5, 0);
-            self.hurtMarked = true;
-            deadsun$pileUpCooldown = 15 + self.getRandom().nextInt(10);
+        if (!self.onGround()) {
+            self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 0, false, false));
         }
+
+        deadsun$pileUpCooldown = 3 + self.getRandom().nextInt(5);
     }
 }

@@ -51,7 +51,7 @@ public class ZombieSpawnHandler {
             boolean isEnd = level.dimension() == Level.END;
             boolean isNether = level.dimension() == Level.NETHER;
 
-            if (ModConfig.isGroupSpawningValue() && toSpawn >= 2) {
+            if (ModConfig.isGroupSpawningValue() && toSpawn >= 2 && !isEnd && !isNether) {
                 spawnGroup(level, player, toSpawn, spawnRadius, minDist, playerOnSurface, isEnd, isNether);
             } else {
                 for (int i = 0; i < toSpawn; i++) {
@@ -118,21 +118,19 @@ public class ZombieSpawnHandler {
 
             int spawnY;
             if (isNether) {
-                int playerY = (int) player.getY();
-                int netherMax = Math.min(125, playerY + 16);
-                int netherMin = Math.max(level.getMinY() + 1, playerY - 16);
-                spawnY = findGroundY(level, x, z, netherMax, true);
-                if (spawnY < netherMin) continue;
-            } else if (!playerOnSurface) {
-                int playerY = (int) player.getY();
-                spawnY = findGroundY(level, x, z, playerY + 8, false);
-                if (spawnY < playerY - 16) continue;
+                int netherCeiling = 125;
+                int startY = Math.min(netherCeiling, (int) player.getY() + 16);
+                spawnY = findGroundY(level, x, z, startY, true);
+                if (spawnY < level.getMinY() + 1) continue;
+            } else if (playerOnSurface) {
+                spawnY = findSurfaceGroundY(level, x, z);
+                if (spawnY < 0) continue;
             } else {
-                int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-                spawnY = findGroundY(level, x, z, surfaceY, false);
+                int startY = (int) player.getY() + 8;
+                int endY = (int) player.getY() - 16;
+                spawnY = findCaveGroundY(level, x, z, startY, endY);
+                if (spawnY < 0) continue;
             }
-
-            if (spawnY < 0) continue;
 
             BlockPos pos = new BlockPos(x, spawnY + 1, z);
 
@@ -144,6 +142,29 @@ public class ZombieSpawnHandler {
             return pos;
         }
         return null;
+    }
+
+    private static int findSurfaceGroundY(ServerLevel level, int x, int z) {
+        int heightmapY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        int minY = level.getMinY();
+        for (int y = heightmapY; y >= minY; y--) {
+            if (level.getBlockState(new BlockPos(x, y, z)).blocksMotion()) {
+                return y;
+            }
+        }
+        return -1;
+    }
+
+    private static int findCaveGroundY(ServerLevel level, int x, int z, int startY, int endY) {
+        int minY = Math.max(level.getMinY(), endY);
+        for (int y = startY; y >= minY; y--) {
+            BlockPos pos = new BlockPos(x, y, z);
+            BlockPos below = new BlockPos(x, y - 1, z);
+            if (!level.getBlockState(pos).blocksMotion() && level.getBlockState(below).blocksMotion()) {
+                return y - 1;
+            }
+        }
+        return -1;
     }
 
     private static int findGroundY(ServerLevel level, int x, int z, int startY, boolean isNether) {
