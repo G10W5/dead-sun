@@ -38,9 +38,11 @@ public class ZombieSpawnHandler {
         for (ServerPlayer player : players) {
             if (player.isSpectator() || player.isCreative()) continue;
 
-            int zombiesToSpawn = countNearbyZombies(level, player) < spawnDensity ? 1 : 0;
+            int nearbyZombies = countNearbyZombies(level, player);
+            int toSpawn = Math.min(spawnDensity - nearbyZombies, 3);
+            if (toSpawn <= 0) continue;
 
-            for (int i = 0; i < zombiesToSpawn; i++) {
+            for (int i = 0; i < toSpawn; i++) {
                 BlockPos pos = findSpawnPosition(level, player, spawnRadius, minDist);
                 if (pos == null) continue;
                 spawnZombie(level, pos);
@@ -58,34 +60,30 @@ public class ZombieSpawnHandler {
     }
 
     private static BlockPos findSpawnPosition(ServerLevel level, ServerPlayer player, int maxDist, int minDist) {
-        BlockPos playerPos = player.blockPosition();
-        boolean playerOnSurface = level.canSeeSky(playerPos.above());
         boolean isEnd = level.dimension() == net.minecraft.world.level.Level.END;
+        boolean isNether = level.dimension() == net.minecraft.world.level.Level.NETHER;
 
-        for (int attempt = 0; attempt < 16; attempt++) {
+        for (int attempt = 0; attempt < 32; attempt++) {
             double angle = level.getRandom().nextDouble() * Math.PI * 2;
             double dist = minDist + level.getRandom().nextDouble() * (maxDist - minDist);
             int x = (int) (player.getX() + Math.cos(angle) * dist);
             int z = (int) (player.getZ() + Math.sin(angle) * dist);
 
-            int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-            int minY = level.getMinY();
-            int y;
-
-            if (isEnd) {
-                y = surfaceY + 1;
-            } else if (playerOnSurface) {
-                y = surfaceY + 1;
+            int surfaceY;
+            if (isNether) {
+                surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
             } else {
-                y = minY + level.getRandom().nextInt(Math.max(1, surfaceY - minY));
+                surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             }
+
+            int y = surfaceY + 1;
 
             BlockPos pos = new BlockPos(x, y, z);
 
             if (isEnd && !level.canSeeSky(pos)) continue;
             if (!isValidSpawnPos(level, pos)) continue;
             if (!checkBlockLight(level, pos)) continue;
-            if (isNearbyTorch(level, pos)) continue;
+            if (!isNether && isNearbyTorch(level, pos)) continue;
 
             return pos;
         }
@@ -93,17 +91,15 @@ public class ZombieSpawnHandler {
     }
 
     private static boolean isValidSpawnPos(ServerLevel level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
         BlockState below = level.getBlockState(pos.below());
+        BlockState at = level.getBlockState(pos);
         BlockState above = level.getBlockState(pos.above());
 
         if (!below.blocksMotion()) return false;
-        if (state.blocksMotion()) return false;
+        if (at.blocksMotion()) return false;
         if (above.blocksMotion()) return false;
 
-        return NaturalSpawner.isValidEmptySpawnBlock(
-                level, pos, state, state.getFluidState(), ZOMBIE_TYPE
-        );
+        return true;
     }
 
     private static boolean checkBlockLight(ServerLevel level, BlockPos pos) {

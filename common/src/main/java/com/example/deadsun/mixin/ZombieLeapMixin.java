@@ -60,28 +60,18 @@ public abstract class ZombieLeapMixin {
         if (!ModConfig.isZombiePileUpValue()) return;
         if (deadsun$pileUpCooldown > 0) { deadsun$pileUpCooldown--; return; }
         if (!self.onGround()) return;
+        if (self.getTarget() == null) return;
+        if (self.getNavigation().isInProgress()) return;
+
+        Vec3 motion = self.getDeltaMovement();
+        if (Math.abs(motion.x) > 0.05 || Math.abs(motion.z) > 0.05) return;
 
         ServerLevel level = (ServerLevel) self.level();
 
-        float yRot = self.getYRot();
-        double dirX = -Math.sin(Math.toRadians(yRot));
-        double dirZ = Math.cos(Math.toRadians(yRot));
-
-        BlockPos front = self.blockPosition().offset(
-                (int) Math.round(dirX), 0, (int) Math.round(dirZ));
-
-        if (!level.getBlockState(front).blocksMotion()) return;
-
-        double cx = self.getX() + dirX * 0.5;
-        double cz = self.getZ() + dirZ * 0.5;
-
-        AABB searchBox = new AABB(
-                cx - 1.0, self.getY() - 0.5, cz - 1.0,
-                cx + 1.0, self.getY() + 3.0, cz + 1.0
-        );
+        AABB searchBox = self.getBoundingBox().inflate(2.0, 1.0, 2.0);
 
         List<Zombie> nearby = level.getEntitiesOfClass(Zombie.class, searchBox,
-                z -> z != self && z.onGround() && z.getY() >= self.getY() - 1.0 && z.getY() <= self.getY() + 1.0);
+                z -> z != self && z.onGround() && z.getY() >= self.getY() - 0.5 && z.getY() <= self.getY() + 0.5);
 
         if (nearby.isEmpty()) return;
 
@@ -93,7 +83,7 @@ public abstract class ZombieLeapMixin {
                 && !level.getBlockState(aboveTarget.above()).blocksMotion()) {
             self.snapTo(self.getX(), newY, self.getZ());
             self.setDeltaMovement(Vec3.ZERO);
-            deadsun$pileUpCooldown = 10 + self.getRandom().nextInt(10);
+            deadsun$pileUpCooldown = 15 + self.getRandom().nextInt(10);
         }
     }
 }
