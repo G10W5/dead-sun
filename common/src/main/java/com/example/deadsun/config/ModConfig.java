@@ -16,8 +16,8 @@ public class ModConfig {
     private float lootBagDropChance = 0.05f;
     private int spawnDensity = 5;
     private float enderPearlChance = 0.30f;
-    private int spawnRadius = 32;
-    private int minSpawnDistance = 24;
+    private int spawnRadius = 128;
+    private int minSpawnDistance = 32;
     private int ticksBetweenSpawns = 10;
     private int maxBlockLight = -1;
     private boolean requireOpenSky = false;

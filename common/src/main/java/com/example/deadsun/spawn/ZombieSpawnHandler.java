@@ -82,7 +82,7 @@ public class ZombieSpawnHandler {
 
             int surfaceY;
             if (isNether) {
-                surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
+                surfaceY = Math.min(level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), 125);
             } else {
                 surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             }

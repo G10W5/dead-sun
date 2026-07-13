@@ -40,14 +40,14 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.spawnDensity.tooltip"))
                 .build());
 
-        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnRadius"), config.getSpawnRadius(), 8, 64)
-                .setDefaultValue(32)
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnRadius"), config.getSpawnRadius(), 16, 128)
+                .setDefaultValue(128)
                 .setSaveConsumer(config::setSpawnRadius)
                 .setTooltip(Component.translatable("config.deadsun.spawnRadius.tooltip"))
                 .build());
 
-        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.minSpawnDistance"), config.getMinSpawnDistance(), 8, 32)
-                .setDefaultValue(24)
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.minSpawnDistance"), config.getMinSpawnDistance(), 16, 64)
+                .setDefaultValue(32)
                 .setSaveConsumer(config::setMinSpawnDistance)
                 .setTooltip(Component.translatable("config.deadsun.minSpawnDistance.tooltip"))
                 .build());
