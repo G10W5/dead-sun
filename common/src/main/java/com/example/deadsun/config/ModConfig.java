@@ -22,6 +22,7 @@ public class ModConfig {
     private int maxBlockLight = -1;
     private boolean requireOpenSky = false;
     private boolean zombieLeap = true;
+    private boolean zombiePileUp = true;
     private float leapStrength = 0.6f;
     private float leapHeight = 0.5f;
 
@@ -130,10 +131,12 @@ public class ModConfig {
     public static boolean isRequireOpenSkyValue() { return INSTANCE.isRequireOpenSky(); }
 
     public boolean isZombieLeap() { return zombieLeap; }
+    public boolean isZombiePileUp() { return zombiePileUp; }
     public float getLeapStrength() { return leapStrength; }
     public float getLeapHeight() { return leapHeight; }
 
     public static boolean isZombieLeapValue() { return INSTANCE.isZombieLeap(); }
+    public static boolean isZombiePileUpValue() { return INSTANCE.isZombiePileUp(); }
     public static float getLeapStrengthValue() { return INSTANCE.getLeapStrength(); }
     public static float getLeapHeightValue() { return INSTANCE.getLeapHeight(); }
 }
