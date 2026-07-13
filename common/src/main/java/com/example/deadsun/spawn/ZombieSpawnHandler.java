@@ -53,8 +53,8 @@ public class ZombieSpawnHandler {
 
             DeadSunMod.LOGGER.info("DeadSun: player={}, surface={}, end={}, nether={}", player.getName().getString(), playerOnSurface, isEnd, isNether);
 
-            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 24);
-            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 8);
+            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 8);
+            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 2);
 
             DeadSunMod.LOGGER.info("DeadSun: radius={}-{}, nearby={}, cap={}", effectiveMinDist, effectiveMaxDist, nearbyZombies, cap);
 
@@ -133,8 +133,8 @@ public class ZombieSpawnHandler {
                 spawnY = findSurfaceGroundY(level, x, z);
                 if (spawnY < 0) continue;
             } else {
-                int startY = (int) player.getY() + 8;
-                int endY = (int) player.getY() - 16;
+                int startY = (int) player.getY() + 12;
+                int endY = (int) player.getY() - 32;
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
                 if (spawnY < 0) {
                     DeadSunMod.LOGGER.info("DeadSun cave attempt {}: no cave ground found at x={} z={} startY={} endY={}", attempt, x, z, startY, endY);

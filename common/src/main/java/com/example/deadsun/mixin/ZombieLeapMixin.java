@@ -60,33 +60,33 @@ public abstract class ZombieLeapMixin {
     private void deadsun$tryPileUp(Zombie self) {
         if (!ModConfig.isZombiePileUpValue()) return;
         if (deadsun$pileUpCooldown > 0) { deadsun$pileUpCooldown--; return; }
-        if (!self.onGround()) return;
 
         ServerLevel level = (ServerLevel) self.level();
         boolean hasTarget = self.getTarget() != null;
 
         boolean stuck = hasTarget
                 && !self.getNavigation().isInProgress()
-                && Math.abs(self.getDeltaMovement().x) < 0.05
-                && Math.abs(self.getDeltaMovement().z) < 0.05;
+                && Math.abs(self.getDeltaMovement().x) < 0.1
+                && Math.abs(self.getDeltaMovement().z) < 0.1;
 
-        AABB searchBox = self.getBoundingBox().inflate(0.5, 0.5, 0.5);
+        AABB searchBox = self.getBoundingBox().inflate(0.6, 0.5, 0.6);
         List<Zombie> colliding = level.getEntitiesOfClass(Zombie.class, searchBox,
-                z -> z != self && z.onGround());
+                z -> z != self);
         boolean hasCollision = !colliding.isEmpty();
 
         if (!stuck && !hasCollision) return;
 
-        float rand = 0.12f + self.getRandom().nextFloat() * 0.04f;
+        float rand = 0.18f + self.getRandom().nextFloat() * 0.06f;
 
         self.setDeltaMovement(
-                self.getDeltaMovement().x() + (rand / 20) * (self.getRandom().nextFloat() * 2 - 1),
+                self.getDeltaMovement().x() + (rand / 15) * (self.getRandom().nextFloat() * 2 - 1),
                 rand,
-                self.getDeltaMovement().z() + (rand / 20) * (self.getRandom().nextFloat() * 2 - 1)
+                self.getDeltaMovement().z() + (rand / 15) * (self.getRandom().nextFloat() * 2 - 1)
         );
         self.fallDistance = 0;
-        self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 0, false, false));
+        self.hurtMarked = true;
+        self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
 
-        deadsun$pileUpCooldown = 3 + self.getRandom().nextInt(5);
+        deadsun$pileUpCooldown = 2 + self.getRandom().nextInt(4);
     }
 }
