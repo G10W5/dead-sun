@@ -1,5 +1,7 @@
 package com.example.deadsun.mixin;
 
+import com.example.deadsun.awareness.LightTrackingHandler;
+import com.example.deadsun.awareness.NoisyZombieHandler;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -28,9 +30,15 @@ public abstract class ZombieLeapMixin {
     private void deadsun$zombieTick(CallbackInfo ci) {
         Zombie self = (Zombie) (Object) this;
         if (self.level().isClientSide()) return;
+        if (!isFeaturesActive(self)) return;
+
+        ServerLevel level = (ServerLevel) self.level();
 
         deadsun$tryLeap(self);
         deadsun$tryPileUp(self);
+
+        LightTrackingHandler.tick(level, self);
+        NoisyZombieHandler.tick(level, self);
     }
 
     @Unique
@@ -52,7 +60,7 @@ public abstract class ZombieLeapMixin {
         float height = ModConfig.getLeapHeightValue();
 
         self.setDeltaMovement(dir.x * strength, height, dir.z * strength);
-        deadsun$leapCooldown = 20 + self.getRandom().nextInt(15);
+        deadsun$leapCooldown = ModConfig.getLeapCooldownValue();
     }
 
     @Unique
@@ -88,5 +96,12 @@ public abstract class ZombieLeapMixin {
         self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
 
         deadsun$pileUpCooldown = 4 + self.getRandom().nextInt(6);
+    }
+
+    @Unique
+    private static boolean isFeaturesActive(Zombie self) {
+        int days = ModConfig.getDaysBeforeActivationValue();
+        if (days <= 0) return true;
+        return self.level().getDefaultClockTime() / 24000 >= days;
     }
 }

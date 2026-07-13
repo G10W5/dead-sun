@@ -1,6 +1,9 @@
 package com.example.deadsun.spawn;
 
 import com.example.deadsun.DeadSunMod;
+import com.example.deadsun.awareness.HordeHandler;
+import com.example.deadsun.awareness.LightTrackingHandler;
+import com.example.deadsun.awareness.SoundTrackingHandler;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +30,12 @@ public class ZombieSpawnHandler {
             (net.minecraft.world.entity.EntityType<Zombie>) BuiltInRegistries.ENTITY_TYPE.getValue(EntityTypeIds.ZOMBIE.identifier());
 
     public static void tick(ServerLevel level) {
+        if (!isFeaturesActive(level)) return;
+
+        SoundTrackingHandler.tick(level);
+        HordeHandler.tick(level);
+        LightTrackingHandler.tick(level);
+
         int interval = ModConfig.getTicksBetweenSpawnsValue();
         tickCounter++;
         if (tickCounter % interval != 0) return;
@@ -51,12 +60,8 @@ public class ZombieSpawnHandler {
             boolean isEnd = level.dimension() == Level.END;
             boolean isNether = level.dimension() == Level.NETHER;
 
-            DeadSunMod.LOGGER.info("DeadSun: player={}, surface={}, end={}, nether={}", player.getName().getString(), playerOnSurface, isEnd, isNether);
-
             int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 32);
             int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 16);
-
-            DeadSunMod.LOGGER.info("DeadSun: radius={}-{}, nearby={}, cap={}", effectiveMinDist, effectiveMaxDist, nearbyZombies, cap);
 
             if (ModConfig.isGroupSpawningValue() && toSpawn >= 2 && !isEnd && !isNether) {
                 spawnGroup(level, player, toSpawn, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
@@ -64,6 +69,33 @@ public class ZombieSpawnHandler {
                 for (int i = 0; i < toSpawn; i++) {
                     BlockPos pos = findSpawnPosition(level, player, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
                     if (pos != null) spawnZombie(level, pos);
+                }
+            }
+        }
+
+        tickSoundPathfinding(level);
+    }
+
+    private static void tickSoundPathfinding(ServerLevel level) {
+        if (!ModConfig.isSoundTrackingValue()) return;
+
+        List<ServerPlayer> players = level.players();
+        for (ServerPlayer player : players) {
+            if (player.isSpectator()) continue;
+
+            int range = ModConfig.getSoundHearRangeValue();
+            AABB box = new AABB(
+                    player.getX() - range, player.getY() - 16, player.getZ() - range,
+                    player.getX() + range, player.getY() + 32, player.getZ() + range
+            );
+
+            List<Zombie> zombies = level.getEntitiesOfClass(Zombie.class, box, e -> e.getTarget() == null);
+            for (Zombie zombie : zombies) {
+                if (level.getRandom().nextInt(10) != 0) continue;
+
+                BlockPos sound = SoundTrackingHandler.findNearestSound(level, zombie.blockPosition(), range);
+                if (sound != null) {
+                    zombie.getNavigation().moveTo(sound.getX() + 0.5, sound.getY(), sound.getZ() + 0.5, 1.0);
                 }
             }
         }
@@ -138,10 +170,7 @@ public class ZombieSpawnHandler {
                 int startY = (int) player.getY() + 4;
                 int endY = Math.max(1, level.getMinY() + 1);
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
-                if (spawnY < 0) {
-                    DeadSunMod.LOGGER.info("DeadSun cave attempt {}: no cave ground found at x={} z={} startY={} endY={}", attempt, x, z, startY, endY);
-                    continue;
-                }
+                if (spawnY < 0) continue;
             }
 
             BlockPos pos = new BlockPos(x, spawnY + 1, z);
@@ -238,5 +267,11 @@ public class ZombieSpawnHandler {
         zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(pos),
                 EntitySpawnReason.NATURAL, null);
         level.addFreshEntity(zombie);
+    }
+
+    private static boolean isFeaturesActive(ServerLevel level) {
+        int days = ModConfig.getDaysBeforeActivationValue();
+        if (days <= 0) return true;
+        return level.getDefaultClockTime() / 24000 >= days;
     }
 }

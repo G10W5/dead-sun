@@ -55,6 +55,8 @@ public abstract class SpawnPlacementsMixin {
             BlockPos pos, RandomSource random,
             CallbackInfoReturnable<Boolean> cir
     ) {
+        if (!isFeaturesActive(level)) return;
+
         if (deadsun$isZombieVariant(type)) {
             if (deadsun$isNearbyTorch(level, pos)) {
                 cir.setReturnValue(false);
@@ -62,5 +64,11 @@ public abstract class SpawnPlacementsMixin {
                 cir.setReturnValue(true);
             }
         }
+    }
+
+    private static boolean isFeaturesActive(ServerLevelAccessor level) {
+        int days = ModConfig.getDaysBeforeActivationValue();
+        if (days <= 0) return true;
+        return level.getLevel().getDefaultClockTime() / 24000 >= days;
     }
 }

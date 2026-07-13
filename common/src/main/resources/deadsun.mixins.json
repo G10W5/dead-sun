@@ -6,6 +6,8 @@
         "NaturalSpawnerMixin",
         "PatrolSpawnerMixin",
         "ServerLevelTickMixin",
+        "ServerLevelSoundMixin",
+        "PlayerActivityMixin",
         "SpawnPlacementsMixin",
         "MobSunMixin",
         "ZombieLeapMixin",

@@ -16,6 +16,8 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "dropAllDeathLoot", at = @At("HEAD"))
     private void deadsun$dropLootBag(ServerLevel level, DamageSource source, CallbackInfo ci) {
+        if (!isFeaturesActive(level)) return;
+
         LivingEntity self = (LivingEntity) (Object) this;
         if (self instanceof Zombie) {
             float chance = ModConfig.getLootBagDropChanceValue();
@@ -23,5 +25,11 @@ public abstract class LivingEntityMixin {
                 self.spawnAtLocation(level, ModItems.LOOT_BAG);
             }
         }
+    }
+
+    private static boolean isFeaturesActive(ServerLevel level) {
+        int days = ModConfig.getDaysBeforeActivationValue();
+        if (days <= 0) return true;
+        return level.getDefaultClockTime() / 24000 >= days;
     }
 }
