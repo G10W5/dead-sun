@@ -38,7 +38,7 @@ public class ZombieSpawnHandler {
         int minDist = ModConfig.getMinSpawnDistanceValue();
 
         for (ServerPlayer player : players) {
-            if (player.isSpectator() || player.isCreative()) continue;
+            if (player.isSpectator()) continue;
 
             int nearbyZombies = countNearbyZombies(level, player);
             int toSpawn = Math.min(spawnDensity - nearbyZombies, 3);
