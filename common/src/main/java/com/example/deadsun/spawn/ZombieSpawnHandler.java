@@ -146,11 +146,9 @@ public class ZombieSpawnHandler {
             BlockPos pos = new BlockPos(x, spawnY + 1, z);
 
             if (isEnd && !level.canSeeSky(pos)) continue;
-            if (!isValidSpawnPos(level, pos)) {
-                BlockState bBelow = level.getBlockState(pos.below());
-                BlockState bAt = level.getBlockState(pos);
-                BlockState bAbove = level.getBlockState(pos.above());
-                DeadSunMod.LOGGER.info("DeadSun cave attempt {}: pos {} rejected - below={} at={} above={}", attempt, pos, bBelow.getBlock().toString(), bAt.getBlock().toString(), bAbove.getBlock().toString());
+            BlockState below = level.getBlockState(pos.below());
+            BlockState at = level.getBlockState(pos);
+            if (!below.blocksMotion() || at.blocksMotion()) {
                 continue;
             }
             if (!checkBlockLight(level, pos)) continue;
