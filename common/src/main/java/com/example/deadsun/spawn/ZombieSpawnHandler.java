@@ -82,8 +82,12 @@ public class ZombieSpawnHandler {
         BlockPos center = findSpawnPosition(level, player, maxDist, minDist, playerOnSurface, isEnd, isNether);
         if (center == null) return;
 
-        int groupSize = ModConfig.getMinGroupSizeValue()
-                + level.getRandom().nextInt(ModConfig.getMaxGroupSizeValue() - ModConfig.getMinGroupSizeValue() + 1);
+        int groupSize;
+        if (level.getRandom().nextFloat() < 0.3f) {
+            groupSize = 8 + level.getRandom().nextInt(5);
+        } else {
+            groupSize = 2 + level.getRandom().nextInt(2);
+        }
         groupSize = Math.min(groupSize, total);
 
         spawnZombie(level, center);
@@ -168,8 +172,8 @@ public class ZombieSpawnHandler {
 
     private static boolean checkBlockLight(ServerLevel level, BlockPos pos) {
         int maxLight = ModConfig.getMaxBlockLightValue();
-        if (maxLight < 0) return false;
-        return level.getBrightness(LightLayer.BLOCK, pos) > maxLight;
+        if (maxLight < 0) return true;
+        return level.getBrightness(LightLayer.BLOCK, pos) <= maxLight;
     }
 
     private static boolean isNearbyTorch(ServerLevel level, BlockPos pos) {
