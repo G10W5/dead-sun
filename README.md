@@ -4,25 +4,27 @@ A hardcore zombie apocalypse mod for Minecraft 26.2. The sun no longer protects 
 
 ## What Changes
 
-**Zombies are everywhere.** Only zombies spawn in the overworld, the Nether, and the End. Skeletons, creepers, spiders — all gone. Every hostile mob has been replaced with a zombie variant. In the Nether you will not find hoglins or piglins; in the End, no endermen. Just zombies.
+**Zombies are everywhere.** Only zombies spawn in the overworld, the Nether, and the End. Skeletons, creepers, spiders — all gone. Every hostile mob has been replaced with a zombie variant. Pillager patrols are suppressed.
 
 **Sunlight is no longer safe.** Zombies do not burn in daylight. They will chase you across open fields at high noon just as readily as at midnight.
 
-**Torches create safety zones.** Place torches, soul torches, or copper torches to keep zombies from spawning nearby. The protection radius is configurable (default 8 blocks). Torches are the difference between life and death.
+**Torches create safety zones.** Place torches, soul torches, or copper torches to keep zombies from spawning nearby. The protection radius is configurable (default 8 blocks).
 
-**Zombies drop loot bags.** When a zombie dies, there is a configurable chance (default 5%) it drops a Loot Bag. Right-click to open it and receive a random reward.
+**Zombies spawn in groups.** In the overworld, zombies spawn in groups of 2-3 or 8-12, creating natural-looking patrols. In the Nether and End, they spawn individually.
 
-**Loot bags stack.** Loot Bags stack up to 16, so you can hoard them.
+**Zombies are smart.** When a zombie is blocked by a wall while chasing you, it will climb on top of other zombies to reach you. When close to a player, zombies leap forward.
 
-**Loot bags have two pools:**
+**Zombies drop loot bags.** When a zombie dies, there is a configurable chance (default 5%) it drops a Loot Bag. Right-click to open it and receive a random reward. Loot bags stack up to 16.
 
-| Overworld | End |
-|---|---|
-| Gunpowder (1-3) | Ender Pearl (1-3) |
-| Bone (1-3) | Ender Eye |
-| Bow | XP Bottle (5-12) |
-| Spider Eye (1-2) | |
-| XP Bottle (3-7) | |
+## Loot Pools
+
+| Overworld | Nether | End |
+|---|---|---|
+| Gunpowder (1-3) | Quartz (6-13) | Ender Pearl (1-3) |
+| Bone (1-3) | Bone (3-5) | Ender Eye |
+| String (2-4) | Gold Nuggets (5-13) | XP Bottle (5-12) |
+| Spider Eye (1-2) | Ghast Tear (1-2) | |
+| XP Bottle (3-7) | XP Bottle (3-7) | |
 
 Opening a loot bag plays a sound and shows what you received above the hotbar.
 
@@ -33,8 +35,20 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 | Setting | Default | Description |
 |---|---|---|
 | `torchRadius` | 8 | Block radius around torches where zombies cannot spawn |
-| `lootBagDropChance` | 0.05 | Percentage chance a zombie drops a loot bag on death |
-| `spawnDensity` | 1 | Max zombies per player in spawn attempts |
+| `lootBagDropChance` | 0.05 | Chance a zombie drops a loot bag on death (0.0 - 1.0) |
+| `spawnDensity` | 50 | Max zombies per player before spawning stops (10-150) |
+| `spawnRadius` | 128 | Max distance from player for zombie spawns (16-128) |
+| `minSpawnDistance` | 32 | Min distance from player for zombie spawns (16-64) |
+| `ticksBetweenSpawns` | 10 | How often the game tries to spawn zombies (20 = 1 second) |
+| `maxBlockLight` | -1 | Max block light for spawning (-1 = ignore light) |
+| `maxZombiesOverworld` | 50 | Max total zombies in the overworld (10-200) |
+| `maxZombiesEnd` | 150 | Max total zombies in the End (10-300) |
+| `maxZombiesNether` | 100 | Max total zombies in the Nether (10-200) |
+| `groupSpawning` | true | Zombies spawn in groups (overworld only) |
+| `zombieLeap` | true | Zombies leap at players when close |
+| `zombiePileUp` | true | Zombies climb on each other when chasing you |
+| `leapStrength` | 0.6 | Horizontal speed of the zombie leap |
+| `leapHeight` | 0.4 | Vertical speed of the zombie leap |
 | `enderPearlChance` | 0.30 | Chance of ender pearls in an End loot bag |
 
 ## Installation
