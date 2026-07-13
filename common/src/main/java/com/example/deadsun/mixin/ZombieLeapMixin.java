@@ -63,20 +63,19 @@ public abstract class ZombieLeapMixin {
         if (!self.onGround()) return;
 
         ServerLevel level = (ServerLevel) self.level();
-        boolean stuck = self.getTarget() != null
+        boolean hasTarget = self.getTarget() != null;
+
+        boolean stuck = hasTarget
                 && !self.getNavigation().isInProgress()
                 && Math.abs(self.getDeltaMovement().x) < 0.05
                 && Math.abs(self.getDeltaMovement().z) < 0.05;
 
-        boolean overlapping = false;
-        if (!stuck) {
-            AABB searchBox = self.getBoundingBox().inflate(0.5, 0.0, 0.5);
-            List<Zombie> nearby = level.getEntitiesOfClass(Zombie.class, searchBox,
-                    z -> z != self && z.onGround() && Math.abs(z.getX() - self.getX()) < 0.5 && Math.abs(z.getZ() - self.getZ()) < 0.5);
-            overlapping = !nearby.isEmpty();
-        }
+        AABB searchBox = self.getBoundingBox().inflate(0.5, 0.5, 0.5);
+        List<Zombie> colliding = level.getEntitiesOfClass(Zombie.class, searchBox,
+                z -> z != self && z.onGround());
+        boolean hasCollision = !colliding.isEmpty();
 
-        if (!stuck && !overlapping) return;
+        if (!stuck && !hasCollision) return;
 
         float rand = 0.12f + self.getRandom().nextFloat() * 0.04f;
 
@@ -86,10 +85,7 @@ public abstract class ZombieLeapMixin {
                 self.getDeltaMovement().z() + (rand / 20) * (self.getRandom().nextFloat() * 2 - 1)
         );
         self.fallDistance = 0;
-
-        if (!self.onGround()) {
-            self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 0, false, false));
-        }
+        self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 5, 0, false, false));
 
         deadsun$pileUpCooldown = 3 + self.getRandom().nextInt(5);
     }

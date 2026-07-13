@@ -58,14 +58,12 @@ public class LootBagItem extends Item {
     private ItemStack rollNetherReward(RandomSource random) {
         float roll = random.nextFloat();
         if (roll < 0.25f) {
-            return new ItemStack(Items.GUNPOWDER, random.nextIntBetweenInclusive(1, 4));
+            return new ItemStack(Items.QUARTZ, random.nextIntBetweenInclusive(6, 13));
         } else if (roll < 0.45f) {
-            return new ItemStack(Items.BONE, random.nextIntBetweenInclusive(1, 3));
-        } else if (roll < 0.60f) {
-            return new ItemStack(Items.BLAZE_POWDER, random.nextIntBetweenInclusive(1, 2));
-        } else if (roll < 0.75f) {
-            return new ItemStack(Items.STRING, random.nextIntBetweenInclusive(2, 4));
-        } else if (roll < 0.88f) {
+            return new ItemStack(Items.BONE, random.nextIntBetweenInclusive(3, 5));
+        } else if (roll < 0.70f) {
+            return new ItemStack(Items.GOLD_NUGGET, random.nextIntBetweenInclusive(5, 13));
+        } else if (roll < 0.85f) {
             return new ItemStack(Items.GHAST_TEAR, random.nextIntBetweenInclusive(1, 2));
         } else {
             return new ItemStack(Items.EXPERIENCE_BOTTLE, random.nextIntBetweenInclusive(3, 7));

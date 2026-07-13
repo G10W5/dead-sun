@@ -51,8 +51,12 @@ public class ZombieSpawnHandler {
             boolean isEnd = level.dimension() == Level.END;
             boolean isNether = level.dimension() == Level.NETHER;
 
+            DeadSunMod.LOGGER.info("DeadSun: player={}, surface={}, end={}, nether={}", player.getName().getString(), playerOnSurface, isEnd, isNether);
+
             int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 24);
             int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 8);
+
+            DeadSunMod.LOGGER.info("DeadSun: radius={}-{}, nearby={}, cap={}", effectiveMinDist, effectiveMaxDist, nearbyZombies, cap);
 
             if (ModConfig.isGroupSpawningValue() && toSpawn >= 2 && !isEnd && !isNether) {
                 spawnGroup(level, player, toSpawn, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
@@ -132,13 +136,22 @@ public class ZombieSpawnHandler {
                 int startY = (int) player.getY() + 8;
                 int endY = (int) player.getY() - 16;
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
-                if (spawnY < 0) continue;
+                if (spawnY < 0) {
+                    DeadSunMod.LOGGER.info("DeadSun cave attempt {}: no cave ground found at x={} z={} startY={} endY={}", attempt, x, z, startY, endY);
+                    continue;
+                }
             }
 
             BlockPos pos = new BlockPos(x, spawnY + 1, z);
 
             if (isEnd && !level.canSeeSky(pos)) continue;
-            if (!isValidSpawnPos(level, pos)) continue;
+            if (!isValidSpawnPos(level, pos)) {
+                BlockState bBelow = level.getBlockState(pos.below());
+                BlockState bAt = level.getBlockState(pos);
+                BlockState bAbove = level.getBlockState(pos.above());
+                DeadSunMod.LOGGER.info("DeadSun cave attempt {}: pos {} rejected - below={} at={} above={}", attempt, pos, bBelow.getBlock().toString(), bAt.getBlock().toString(), bAbove.getBlock().toString());
+                continue;
+            }
             if (!checkBlockLight(level, pos)) continue;
             if (!isNether && isNearbyTorch(level, pos)) continue;
 
