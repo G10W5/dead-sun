@@ -81,8 +81,8 @@ public abstract class ZombieLeapMixin {
 
         if (!level.getBlockState(aboveTarget).blocksMotion()
                 && !level.getBlockState(aboveTarget.above()).blocksMotion()) {
-            self.snapTo(self.getX(), newY, self.getZ());
-            self.setDeltaMovement(Vec3.ZERO);
+            self.setDeltaMovement(0, 0.5, 0);
+            self.hurtMarked = true;
             deadsun$pileUpCooldown = 15 + self.getRandom().nextInt(10);
         }
     }

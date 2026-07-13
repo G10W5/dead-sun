@@ -1,5 +1,6 @@
 package com.example.deadsun.spawn;
 
+import com.example.deadsun.DeadSunMod;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,7 +10,6 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -31,6 +31,8 @@ public class ZombieSpawnHandler {
         if (tickCounter % interval != 0) return;
 
         List<ServerPlayer> players = level.players();
+        if (players.isEmpty()) return;
+
         int spawnDensity = ModConfig.getSpawnDensityValue();
         int spawnRadius = ModConfig.getSpawnRadiusValue();
         int minDist = ModConfig.getMinSpawnDistanceValue();
@@ -40,11 +42,20 @@ public class ZombieSpawnHandler {
 
             int nearbyZombies = countNearbyZombies(level, player);
             int toSpawn = Math.min(spawnDensity - nearbyZombies, 3);
-            if (toSpawn <= 0) continue;
+            if (toSpawn <= 0) {
+                DeadSunMod.LOGGER.info("DeadSun: density cap reached ({}/{}), skipping", nearbyZombies, spawnDensity);
+                continue;
+            }
+
+            DeadSunMod.LOGGER.info("DeadSun: trying to spawn {} zombies for {} (nearby: {})", toSpawn, player.getName().getString(), nearbyZombies);
 
             for (int i = 0; i < toSpawn; i++) {
                 BlockPos pos = findSpawnPosition(level, player, spawnRadius, minDist);
-                if (pos == null) continue;
+                if (pos == null) {
+                    DeadSunMod.LOGGER.info("DeadSun: no valid position found after 32 attempts");
+                    continue;
+                }
+                DeadSunMod.LOGGER.info("DeadSun: spawning zombie at {}", pos);
                 spawnZombie(level, pos);
             }
         }
@@ -77,29 +88,43 @@ public class ZombieSpawnHandler {
             }
 
             int y = surfaceY + 1;
-
             BlockPos pos = new BlockPos(x, y, z);
 
-            if (isEnd && !level.canSeeSky(pos)) continue;
-            if (!isValidSpawnPos(level, pos)) continue;
-            if (!checkBlockLight(level, pos)) continue;
-            if (!isNether && isNearbyTorch(level, pos)) continue;
+            if (isEnd && !level.canSeeSky(pos)) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: End position {} rejected - no sky", attempt, pos);
+                continue;
+            }
+
+            BlockState below = level.getBlockState(pos.below());
+            BlockState at = level.getBlockState(pos);
+            BlockState above = level.getBlockState(pos.above());
+
+            if (!below.blocksMotion()) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block below ({}) doesn't block motion", attempt, pos, below.getBlock().toString());
+                continue;
+            }
+            if (at.blocksMotion()) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block at position ({}) blocks motion", attempt, pos, at.getBlock().toString());
+                continue;
+            }
+            if (above.blocksMotion()) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block above ({}) blocks motion", attempt, pos, above.getBlock().toString());
+                continue;
+            }
+
+            if (!checkBlockLight(level, pos)) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block light too high", attempt, pos);
+                continue;
+            }
+
+            if (!isNether && isNearbyTorch(level, pos)) {
+                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - nearby torch", attempt, pos);
+                continue;
+            }
 
             return pos;
         }
         return null;
-    }
-
-    private static boolean isValidSpawnPos(ServerLevel level, BlockPos pos) {
-        BlockState below = level.getBlockState(pos.below());
-        BlockState at = level.getBlockState(pos);
-        BlockState above = level.getBlockState(pos.above());
-
-        if (!below.blocksMotion()) return false;
-        if (at.blocksMotion()) return false;
-        if (above.blocksMotion()) return false;
-
-        return true;
     }
 
     private static boolean checkBlockLight(ServerLevel level, BlockPos pos) {
@@ -110,11 +135,11 @@ public class ZombieSpawnHandler {
     }
 
     private static boolean isNearbyTorch(ServerLevel level, BlockPos pos) {
-        int radius = ModConfig.getTorchRadiusValue();
+        int radius = Math.min(ModConfig.getTorchRadiusValue(), 8);
         for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    if (x * x + y * y + z * z > radius * radius) continue;
+            for (int z = -radius; z <= radius; z++) {
+                for (int y = -2; y <= 4; y++) {
+                    if (x * x + z * z > radius * radius) continue;
                     BlockState state = level.getBlockState(pos.offset(x, y, z));
                     if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH)
                             || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)
