@@ -3,7 +3,6 @@ package com.example.deadsun.mixin;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,7 +17,7 @@ public abstract class ZombieLeapMixin {
     @Unique
     private int deadsun$leapCooldown = 0;
 
-    @Inject(method = "aiStep", at = @At("RETURN"))
+    @Inject(method = "tick", at = @At("RETURN"))
     private void deadsun$leapAtPlayer(CallbackInfo ci) {
         Zombie self = (Zombie) (Object) this;
         if (self.level().isClientSide()) return;
@@ -36,7 +35,7 @@ public abstract class ZombieLeapMixin {
         if (!(nearest instanceof ServerPlayer target)) return;
 
         double dist = self.distanceTo(target);
-        if (dist > 6.0 || dist < 1.5) return;
+        if (dist > 4.0 || dist < 1.5) return;
 
         Vec3 dir = target.position().subtract(self.position()).normalize();
         float strength = ModConfig.getLeapStrengthValue();
