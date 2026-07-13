@@ -69,7 +69,7 @@ public abstract class NaturalSpawnerMixin {
         RandomSource random = level.getRandom();
         int x = chunkPos.getMinBlockX() + random.nextInt(16);
         int z = chunkPos.getMinBlockZ() + random.nextInt(16);
-        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, x, z);
+        int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 
         if (random.nextBoolean()) {
             cir.setReturnValue(new BlockPos(x, surfaceY + 1, z));
