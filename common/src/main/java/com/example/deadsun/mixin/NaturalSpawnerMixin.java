@@ -7,14 +7,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.util.RandomSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -22,7 +18,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -52,32 +47,6 @@ public abstract class NaturalSpawnerMixin {
                 || type == deadsun$entity(EntityTypeIds.HUSK)
                 || type == deadsun$entity(EntityTypeIds.DROWNED)
                 || type == deadsun$entity(EntityTypeIds.ZOMBIE_VILLAGER);
-    }
-
-    @Inject(
-            method = "getRandomPosWithin",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private static void deadsun$positionOverride(
-            Level level, LevelChunk chunk,
-            CallbackInfoReturnable<BlockPos> cir
-    ) {
-        if (level.dimension() == Level.NETHER) return;
-
-        ChunkPos chunkPos = chunk.getPos();
-        RandomSource random = level.getRandom();
-        int x = chunkPos.getMinBlockX() + random.nextInt(16);
-        int z = chunkPos.getMinBlockZ() + random.nextInt(16);
-        int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
-
-        if (random.nextBoolean()) {
-            cir.setReturnValue(new BlockPos(x, surfaceY + 1, z));
-        } else {
-            int minY = chunk.getMinY();
-            int caveY = minY + random.nextInt(Math.max(1, surfaceY - minY));
-            cir.setReturnValue(new BlockPos(x, caveY, z));
-        }
     }
 
     @Inject(

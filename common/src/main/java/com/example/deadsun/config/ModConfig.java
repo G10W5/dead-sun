@@ -16,6 +16,11 @@ public class ModConfig {
     private float lootBagDropChance = 0.05f;
     private int spawnDensity = 1;
     private float enderPearlChance = 0.30f;
+    private int spawnRadius = 32;
+    private int minSpawnDistance = 24;
+    private int ticksBetweenSpawns = 10;
+    private int maxBlockLight = -1;
+    private boolean requireOpenSky = false;
 
     public int getTorchRadius() {
         return torchRadius;
@@ -48,6 +53,12 @@ public class ModConfig {
     public void setEnderPearlChance(float enderPearlChance) {
         this.enderPearlChance = enderPearlChance;
     }
+
+    public void setSpawnRadius(int spawnRadius) { this.spawnRadius = spawnRadius; }
+    public void setMinSpawnDistance(int minSpawnDistance) { this.minSpawnDistance = minSpawnDistance; }
+    public void setTicksBetweenSpawns(int ticksBetweenSpawns) { this.ticksBetweenSpawns = ticksBetweenSpawns; }
+    public void setMaxBlockLight(int maxBlockLight) { this.maxBlockLight = maxBlockLight; }
+    public void setRequireOpenSky(boolean requireOpenSky) { this.requireOpenSky = requireOpenSky; }
 
     public static void load() {
         Path configDir = Path.of("config");
@@ -102,4 +113,16 @@ public class ModConfig {
     public static float getEnderPearlChanceValue() {
         return INSTANCE.getEnderPearlChance();
     }
+
+    public int getSpawnRadius() { return spawnRadius; }
+    public int getMinSpawnDistance() { return minSpawnDistance; }
+    public int getTicksBetweenSpawns() { return ticksBetweenSpawns; }
+    public int getMaxBlockLight() { return maxBlockLight; }
+    public boolean isRequireOpenSky() { return requireOpenSky; }
+
+    public static int getSpawnRadiusValue() { return INSTANCE.getSpawnRadius(); }
+    public static int getMinSpawnDistanceValue() { return INSTANCE.getMinSpawnDistance(); }
+    public static int getTicksBetweenSpawnsValue() { return INSTANCE.getTicksBetweenSpawns(); }
+    public static int getMaxBlockLightValue() { return INSTANCE.getMaxBlockLight(); }
+    public static boolean isRequireOpenSkyValue() { return INSTANCE.isRequireOpenSky(); }
 }

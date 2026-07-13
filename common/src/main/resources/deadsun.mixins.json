@@ -4,6 +4,7 @@
     "compatibilityLevel": "JAVA_25",
     "mixins": [
         "NaturalSpawnerMixin",
+        "ServerLevelTickMixin",
         "SpawnPlacementsMixin",
         "MobSunMixin",
         "LivingEntityMixin"
