@@ -53,8 +53,8 @@ public class ZombieSpawnHandler {
 
             DeadSunMod.LOGGER.info("DeadSun: player={}, surface={}, end={}, nether={}", player.getName().getString(), playerOnSurface, isEnd, isNether);
 
-            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 8);
-            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 2);
+            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 32);
+            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 8);
 
             DeadSunMod.LOGGER.info("DeadSun: radius={}-{}, nearby={}, cap={}", effectiveMinDist, effectiveMaxDist, nearbyZombies, cap);
 
@@ -117,7 +117,8 @@ public class ZombieSpawnHandler {
 
     private static BlockPos findSpawnPosition(ServerLevel level, ServerPlayer player, int maxDist, int minDist,
                                               boolean playerOnSurface, boolean isEnd, boolean isNether) {
-        for (int attempt = 0; attempt < 32; attempt++) {
+        int attempts = playerOnSurface || isEnd || isNether ? 32 : 64;
+        for (int attempt = 0; attempt < attempts; attempt++) {
             double angle = level.getRandom().nextDouble() * Math.PI * 2;
             double dist = minDist + level.getRandom().nextDouble() * (maxDist - minDist);
             int x = (int) (player.getX() + Math.cos(angle) * dist);
@@ -133,8 +134,8 @@ public class ZombieSpawnHandler {
                 spawnY = findSurfaceGroundY(level, x, z);
                 if (spawnY < 0) continue;
             } else {
-                int startY = (int) player.getY() + 12;
-                int endY = (int) player.getY() - 32;
+                int startY = (int) player.getY() + 4;
+                int endY = level.getMinY() + 1;
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
                 if (spawnY < 0) {
                     DeadSunMod.LOGGER.info("DeadSun cave attempt {}: no cave ground found at x={} z={} startY={} endY={}", attempt, x, z, startY, endY);
