@@ -24,7 +24,7 @@ public class ModConfig {
     private boolean zombieLeap = true;
     private boolean zombiePileUp = true;
     private float leapStrength = 0.6f;
-    private float leapHeight = 0.5f;
+    private float leapHeight = 0.4f;
 
     public int getTorchRadius() {
         return torchRadius;
@@ -63,6 +63,10 @@ public class ModConfig {
     public void setTicksBetweenSpawns(int ticksBetweenSpawns) { this.ticksBetweenSpawns = ticksBetweenSpawns; }
     public void setMaxBlockLight(int maxBlockLight) { this.maxBlockLight = maxBlockLight; }
     public void setRequireOpenSky(boolean requireOpenSky) { this.requireOpenSky = requireOpenSky; }
+    public void setZombieLeap(boolean zombieLeap) { this.zombieLeap = zombieLeap; }
+    public void setZombiePileUp(boolean zombiePileUp) { this.zombiePileUp = zombiePileUp; }
+    public void setLeapStrength(float leapStrength) { this.leapStrength = leapStrength; }
+    public void setLeapHeight(float leapHeight) { this.leapHeight = leapHeight; }
 
     public static void load() {
         Path configDir = Path.of("config");

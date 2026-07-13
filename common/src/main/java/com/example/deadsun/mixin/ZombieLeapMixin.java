@@ -42,6 +42,7 @@ public abstract class ZombieLeapMixin {
         ServerLevel level = (ServerLevel) self.level();
         net.minecraft.world.entity.player.Player nearest = level.getNearestPlayer(self, 8.0);
         if (!(nearest instanceof ServerPlayer target)) return;
+        if (target.isCreative() || target.isSpectator()) return;
 
         double dist = self.distanceTo(target);
         if (dist > 4.0 || dist < 1.5) return;
@@ -71,15 +72,16 @@ public abstract class ZombieLeapMixin {
 
         if (!level.getBlockState(front).blocksMotion()) return;
 
+        double cx = self.getX() + dirX * 0.5;
+        double cz = self.getZ() + dirZ * 0.5;
+
         AABB searchBox = new AABB(
-                self.getX() + dirX * 2 - 1.5, self.getY() - 0.5,
-                self.getZ() + dirZ * 2 - 1.5,
-                self.getX() + dirX * 2 + 1.5, self.getY() + 2.0,
-                self.getZ() + dirZ * 2 + 1.5
+                cx - 1.0, self.getY() - 0.5, cz - 1.0,
+                cx + 1.0, self.getY() + 3.0, cz + 1.0
         );
 
         List<Zombie> nearby = level.getEntitiesOfClass(Zombie.class, searchBox,
-                z -> z != self && z.onGround() && z.getY() <= self.getY() + 0.5);
+                z -> z != self && z.onGround() && z.getY() >= self.getY() - 1.0 && z.getY() <= self.getY() + 1.0);
 
         if (nearby.isEmpty()) return;
 

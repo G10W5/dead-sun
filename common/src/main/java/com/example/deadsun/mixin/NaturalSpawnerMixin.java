@@ -60,18 +60,8 @@ public abstract class NaturalSpawnerMixin {
             RandomSource random, BlockPos pos,
             CallbackInfoReturnable<Optional<MobSpawnSettings.SpawnerData>> cir
     ) {
-        Optional<MobSpawnSettings.SpawnerData> original = cir.getReturnValue();
-        if (original.isEmpty()) return;
         if (category != MobCategory.MONSTER) return;
-
-        MobSpawnSettings.SpawnerData data = original.get();
-        EntityType<?> entityType = data.type();
-        EntityType<?> zombieType = deadsun$entity(EntityTypeIds.ZOMBIE);
-
-        if (!deadsun$isZombieVariant(entityType)) {
-            cir.setReturnValue(Optional.of(new MobSpawnSettings.SpawnerData(
-                    zombieType, data.minCount(), data.maxCount())));
-        }
+        cir.setReturnValue(Optional.empty());
     }
 
     @Redirect(

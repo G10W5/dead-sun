@@ -34,10 +34,62 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.lootBagDropChance.tooltip"))
                 .build());
 
-        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnDensity"), config.getSpawnDensity(), 1, 10)
-                .setDefaultValue(1)
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnDensity"), config.getSpawnDensity(), 1, 20)
+                .setDefaultValue(5)
                 .setSaveConsumer(config::setSpawnDensity)
                 .setTooltip(Component.translatable("config.deadsun.spawnDensity.tooltip"))
+                .build());
+
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnRadius"), config.getSpawnRadius(), 8, 64)
+                .setDefaultValue(32)
+                .setSaveConsumer(config::setSpawnRadius)
+                .setTooltip(Component.translatable("config.deadsun.spawnRadius.tooltip"))
+                .build());
+
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.minSpawnDistance"), config.getMinSpawnDistance(), 8, 32)
+                .setDefaultValue(24)
+                .setSaveConsumer(config::setMinSpawnDistance)
+                .setTooltip(Component.translatable("config.deadsun.minSpawnDistance.tooltip"))
+                .build());
+
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.ticksBetweenSpawns"), config.getTicksBetweenSpawns(), 1, 40)
+                .setDefaultValue(10)
+                .setSaveConsumer(config::setTicksBetweenSpawns)
+                .setTooltip(Component.translatable("config.deadsun.ticksBetweenSpawns.tooltip"))
+                .build());
+
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.maxBlockLight"), config.getMaxBlockLight(), -1, 15)
+                .setDefaultValue(-1)
+                .setSaveConsumer(config::setMaxBlockLight)
+                .setTooltip(Component.translatable("config.deadsun.maxBlockLight.tooltip"))
+                .build());
+
+        general.addEntry(entry.startBooleanToggle(Component.translatable("config.deadsun.zombieLeap"), config.isZombieLeap())
+                .setDefaultValue(true)
+                .setSaveConsumer(config::setZombieLeap)
+                .setTooltip(Component.translatable("config.deadsun.zombieLeap.tooltip"))
+                .build());
+
+        general.addEntry(entry.startBooleanToggle(Component.translatable("config.deadsun.zombiePileUp"), config.isZombiePileUp())
+                .setDefaultValue(true)
+                .setSaveConsumer(config::setZombiePileUp)
+                .setTooltip(Component.translatable("config.deadsun.zombiePileUp.tooltip"))
+                .build());
+
+        general.addEntry(entry.startFloatField(Component.translatable("config.deadsun.leapStrength"), config.getLeapStrength())
+                .setDefaultValue(0.6f)
+                .setMin(0.1f)
+                .setMax(2.0f)
+                .setSaveConsumer(config::setLeapStrength)
+                .setTooltip(Component.translatable("config.deadsun.leapStrength.tooltip"))
+                .build());
+
+        general.addEntry(entry.startFloatField(Component.translatable("config.deadsun.leapHeight"), config.getLeapHeight())
+                .setDefaultValue(0.4f)
+                .setMin(0.1f)
+                .setMax(2.0f)
+                .setSaveConsumer(config::setLeapHeight)
+                .setTooltip(Component.translatable("config.deadsun.leapHeight.tooltip"))
                 .build());
 
         general.addEntry(entry.startFloatField(Component.translatable("config.deadsun.enderPearlChance"), config.getEnderPearlChance())
