@@ -40,7 +40,7 @@ public class ModConfig {
 
     // --- New fields: Sound Tracking ---
     private boolean soundTracking = true;
-    private int soundHearRange = 64;
+    private int soundHearRange = 12;
     private int soundDecayTime = 200;
 
     // --- New fields: Wandering Hordes ---
@@ -55,7 +55,7 @@ public class ModConfig {
 
     // --- New fields: Noisy Zombies ---
     private boolean noisyZombies = true;
-    private int noisyZombieRange = 12;
+    private int noisyZombieRange = 24;
     private int noisyZombieCooldown = 200;
 
     // --- Existing getters ---

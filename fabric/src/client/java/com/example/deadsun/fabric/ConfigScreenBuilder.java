@@ -113,8 +113,8 @@ public class ConfigScreenBuilder {
         soundSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.soundTracking"), config.isSoundTracking())
                 .setDefaultValue(true).setSaveConsumer(config::setSoundTracking)
                 .setTooltip(Component.translatable("config.deadsun.soundTracking.tooltip")).build());
-        soundSub.add(entry.startIntSlider(Component.translatable("config.deadsun.soundHearRange"), config.getSoundHearRange(), 16, 128)
-                .setDefaultValue(64).setSaveConsumer(config::setSoundHearRange)
+        soundSub.add(entry.startIntSlider(Component.translatable("config.deadsun.soundHearRange"), config.getSoundHearRange(), 8, 128)
+                .setDefaultValue(12).setSaveConsumer(config::setSoundHearRange)
                 .setTooltip(Component.translatable("config.deadsun.soundHearRange.tooltip")).build());
         soundSub.add(entry.startIntSlider(Component.translatable("config.deadsun.soundDecayTime"), config.getSoundDecayTime(), 60, 600)
                 .setDefaultValue(200).setSaveConsumer(config::setSoundDecayTime)
@@ -153,7 +153,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(true).setSaveConsumer(config::setNoisyZombies)
                 .setTooltip(Component.translatable("config.deadsun.noisyZombies.tooltip")).build());
         noisySub.add(entry.startIntSlider(Component.translatable("config.deadsun.noisyZombieRange"), config.getNoisyZombieRange(), 8, 64)
-                .setDefaultValue(12).setSaveConsumer(config::setNoisyZombieRange)
+                .setDefaultValue(24).setSaveConsumer(config::setNoisyZombieRange)
                 .setTooltip(Component.translatable("config.deadsun.noisyZombieRange.tooltip")).build());
         noisySub.add(entry.startIntSlider(Component.translatable("config.deadsun.noisyZombieCooldown"), config.getNoisyZombieCooldown(), 40, 400)
                 .setDefaultValue(200).setSaveConsumer(config::setNoisyZombieCooldown)

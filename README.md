@@ -97,7 +97,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 | Setting | Default | Description |
 |---|---|---|
 | `soundTracking` | true | Zombies pathfind toward player sounds (sneaking silences you) |
-| `soundHearRange` | 64 | How far zombies can hear sounds (16-128) |
+| `soundHearRange` | 12 | How far zombies can hear sounds (8-128) |
 | `soundDecayTime` | 200 | How long sounds persist in ticks (60-600) |
 
 ### Light Tracking
@@ -121,7 +121,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 | Setting | Default | Description |
 |---|---|---|
 | `noisyZombies` | true | Zombies call out near players, attracting others (requires line of sight) |
-| `noisyZombieRange` | 12 | Range of the noisy zombie call (8-64) |
+| `noisyZombieRange` | 24 | Range of the noisy zombie call (8-64) |
 | `noisyZombieCooldown` | 200 | Ticks between calls (40-400) |
 
 ## Installation
