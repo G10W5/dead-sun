@@ -12,15 +12,15 @@ A hardcore zombie apocalypse mod for Minecraft 26.2. The sun no longer protects 
 
 **Zombies spawn in groups.** In the overworld, zombies spawn in groups of 2-3 or 8-12, creating natural-looking patrols. In the Nether and End, they spawn individually.
 
-**Zombies are smart.** When a zombie is blocked by a wall while chasing you, it will climb on top of other zombies to reach you. When close to a player, zombies leap forward.
+**Zombies are smart.** When a zombie is blocked by a wall while chasing you, it will climb on top of other zombies to reach you. When close to a player, zombies leap forward. Sneaking behind zombies avoids detection.
 
 **Zombies drop loot bags.** When a zombie dies, there is a configurable chance (default 5%) it drops a Loot Bag. Right-click to open it and receive a random reward. Loot bags stack up to 16.
 
-**Zombies hear you.** Sounds made by players — opening doors, breaking blocks, eating — create audio markers that zombies pathfind toward. Stay quiet or attract the horde.
+**Zombies hear you.** Sounds made by players — opening doors, breaking blocks, eating — create audio markers that zombies pathfind toward. Sneaking silences your movements.
 
 **Zombies are attracted to light.** At night, zombies seek out light sources (torches, lanterns, glowstone). Torches still keep you safe from spawning, but they act as beacons that draw zombies toward your base from afar.
 
-**Zombies call for reinforcements.** When a zombie spots a player, it calls out to nearby zombies, pulling them toward you. Chain reactions can occur — one zombie calling more.
+**Zombies call for reinforcements.** When a zombie spots a player, it calls out to nearby zombies, pulling them toward you. Requires line of sight — sneaking avoids detection.
 
 **Wandering hordes.** Zombies periodically group up and wander toward random waypoints, creating organic patrols across the landscape.
 
@@ -49,7 +49,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 | `spawnDensity` | 50 | Max zombies per player before spawning stops (10-150) |
 | `spawnRadius` | 128 | Max distance from player for zombie spawns (16-128) |
 | `minSpawnDistance` | 32 | Min distance from player for zombie spawns (16-64) |
-| `ticksBetweenSpawns` | 10 | How often the game tries to spawn zombies (20 = 1 second) |
+| `ticksBetweenSpawns` | 20 | How often the game tries to spawn zombies (20 = 1 second) |
 | `maxBlockLight` | -1 | Max block light for spawning (-1 = ignore light) |
 | `groupSpawning` | true | Zombies spawn in groups (overworld only) |
 | `minGroupSize` | 2 | Min zombies per group |
@@ -74,7 +74,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 
 | Setting | Default | Description |
 |---|---|---|
-| `zombieLeap` | true | Zombies leap at players when close |
+| `zombieLeap` | true | Zombies leap at players when close (sneaking prevents leap) |
 | `zombiePileUp` | true | Zombies climb on each other when chasing you |
 | `leapStrength` | 0.6 | Horizontal speed of the zombie leap |
 | `leapHeight` | 0.4 | Vertical speed of the zombie leap |
@@ -96,7 +96,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 
 | Setting | Default | Description |
 |---|---|---|
-| `soundTracking` | true | Zombies pathfind toward player sounds |
+| `soundTracking` | true | Zombies pathfind toward player sounds (sneaking silences you) |
 | `soundHearRange` | 64 | How far zombies can hear sounds (16-128) |
 | `soundDecayTime` | 200 | How long sounds persist in ticks (60-600) |
 
@@ -120,14 +120,14 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 
 | Setting | Default | Description |
 |---|---|---|
-| `noisyZombies` | true | Zombies call out near players, attracting others |
-| `noisyZombieRange` | 24 | Range of the noisy zombie call (8-64) |
-| `noisyZombieCooldown` | 100 | Ticks between calls (40-400) |
+| `noisyZombies` | true | Zombies call out near players, attracting others (requires line of sight) |
+| `noisyZombieRange` | 12 | Range of the noisy zombie call (8-64) |
+| `noisyZombieCooldown` | 200 | Ticks between calls (40-400) |
 
 ## Installation
 
 1. Install [Fabric](https://fabricmc.net/) or [NeoForge](https://neoforged.net/) for Minecraft 26.2
-2. Place the universal JAR (`DeadSun-1.0.0-universal.jar`) into your `mods` folder
+2. Place the universal JAR (`DeadSun-1.1.0-universal.jar`) into your `mods` folder
 3. Optionally install [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config](https://modrinth.com/mod/cloth-config) for the in-game settings screen
 
 The same JAR works on both Fabric and NeoForge.

@@ -33,7 +33,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(32).setSaveConsumer(config::setMinSpawnDistance)
                 .setTooltip(Component.translatable("config.deadsun.minSpawnDistance.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.ticksBetweenSpawns"), config.getTicksBetweenSpawns(), 1, 40)
-                .setDefaultValue(10).setSaveConsumer(config::setTicksBetweenSpawns)
+                .setDefaultValue(20).setSaveConsumer(config::setTicksBetweenSpawns)
                 .setTooltip(Component.translatable("config.deadsun.ticksBetweenSpawns.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxBlockLight"), config.getMaxBlockLight(), -1, 15)
                 .setDefaultValue(-1).setSaveConsumer(config::setMaxBlockLight)
@@ -150,10 +150,10 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(true).setSaveConsumer(config::setNoisyZombies)
                 .setTooltip(Component.translatable("config.deadsun.noisyZombies.tooltip")).build());
         noisySub.add(entry.startIntSlider(Component.translatable("config.deadsun.noisyZombieRange"), config.getNoisyZombieRange(), 8, 64)
-                .setDefaultValue(24).setSaveConsumer(config::setNoisyZombieRange)
+                .setDefaultValue(12).setSaveConsumer(config::setNoisyZombieRange)
                 .setTooltip(Component.translatable("config.deadsun.noisyZombieRange.tooltip")).build());
         noisySub.add(entry.startIntSlider(Component.translatable("config.deadsun.noisyZombieCooldown"), config.getNoisyZombieCooldown(), 40, 400)
-                .setDefaultValue(100).setSaveConsumer(config::setNoisyZombieCooldown)
+                .setDefaultValue(200).setSaveConsumer(config::setNoisyZombieCooldown)
                 .setTooltip(Component.translatable("config.deadsun.noisyZombieCooldown.tooltip")).build());
         general.addEntry(noisySub.build());
 

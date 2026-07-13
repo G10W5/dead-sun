@@ -60,8 +60,8 @@ public class ZombieSpawnHandler {
             boolean isEnd = level.dimension() == Level.END;
             boolean isNether = level.dimension() == Level.NETHER;
 
-            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 32);
-            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 16);
+            int effectiveMaxDist = spawnRadius;
+            int effectiveMinDist = minDist;
 
             if (ModConfig.isGroupSpawningValue() && toSpawn >= 2 && !isEnd && !isNether) {
                 spawnGroup(level, player, toSpawn, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
@@ -82,6 +82,7 @@ public class ZombieSpawnHandler {
         List<ServerPlayer> players = level.players();
         for (ServerPlayer player : players) {
             if (player.isSpectator()) continue;
+            if (player.isCrouching()) continue;
 
             int range = ModConfig.getSoundHearRangeValue();
             AABB box = new AABB(
@@ -91,11 +92,11 @@ public class ZombieSpawnHandler {
 
             List<Zombie> zombies = level.getEntitiesOfClass(Zombie.class, box, e -> e.getTarget() == null);
             for (Zombie zombie : zombies) {
-                if (level.getRandom().nextInt(10) != 0) continue;
+                if (level.getRandom().nextInt(20) != 0) continue;
 
                 BlockPos sound = SoundTrackingHandler.findNearestSound(level, zombie.blockPosition(), range);
                 if (sound != null) {
-                    zombie.getNavigation().moveTo(sound.getX() + 0.5, sound.getY(), sound.getZ() + 0.5, 1.0);
+                    zombie.getNavigation().moveTo(sound.getX() + 0.5, sound.getY(), sound.getZ() + 0.5, 0.8);
                 }
             }
         }

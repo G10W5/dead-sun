@@ -51,6 +51,7 @@ public abstract class ZombieLeapMixin {
         net.minecraft.world.entity.player.Player nearest = level.getNearestPlayer(self, 8.0);
         if (!(nearest instanceof ServerPlayer target)) return;
         if (target.isCreative() || target.isSpectator()) return;
+        if (target.isCrouching()) return;
 
         double dist = self.distanceTo(target);
         if (dist > 4.0 || dist < 1.5) return;

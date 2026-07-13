@@ -19,7 +19,7 @@ public class ModConfig {
     private float enderPearlChance = 0.30f;
     private int spawnRadius = 128;
     private int minSpawnDistance = 32;
-    private int ticksBetweenSpawns = 10;
+    private int ticksBetweenSpawns = 20;
     private int maxBlockLight = -1;
     private boolean requireOpenSky = false;
     private boolean zombieLeap = true;
@@ -54,8 +54,8 @@ public class ModConfig {
 
     // --- New fields: Noisy Zombies ---
     private boolean noisyZombies = true;
-    private int noisyZombieRange = 24;
-    private int noisyZombieCooldown = 100;
+    private int noisyZombieRange = 12;
+    private int noisyZombieCooldown = 200;
 
     // --- Existing getters ---
     public int getTorchRadius() { return torchRadius; }

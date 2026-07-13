@@ -27,9 +27,12 @@ public class NoisyZombieHandler {
         Long lastCall = LAST_CALL_TIME.get(entityId);
         if (lastCall != null && now - lastCall < cooldown) return;
 
-        ServerPlayer nearest = (ServerPlayer) level.getNearestPlayer(zombie, 16.0);
+        ServerPlayer nearest = (ServerPlayer) level.getNearestPlayer(zombie, 12.0);
         if (nearest == null) return;
         if (nearest.isCreative() || nearest.isSpectator()) return;
+        if (nearest.isCrouching()) return;
+
+        if (!zombie.hasLineOfSight(nearest)) return;
 
         LAST_CALL_TIME.put(entityId, now);
 
@@ -49,7 +52,7 @@ public class NoisyZombieHandler {
                     zombie.getX() + (other.getRandom().nextDouble() - 0.5) * 4,
                     zombie.getY(),
                     zombie.getZ() + (other.getRandom().nextDouble() - 0.5) * 4,
-                    0.9
+                    0.8
             );
         }
     }
