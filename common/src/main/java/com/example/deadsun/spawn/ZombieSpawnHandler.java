@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityTypeIds;
 import net.minecraft.world.entity.monster.zombie.Zombie;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,29 +37,35 @@ public class ZombieSpawnHandler {
         int spawnDensity = ModConfig.getSpawnDensityValue();
         int spawnRadius = ModConfig.getSpawnRadiusValue();
         int minDist = ModConfig.getMinSpawnDistanceValue();
+        int maxDimension = getMaxZombiesForDimension(level);
 
         for (ServerPlayer player : players) {
             if (player.isSpectator()) continue;
 
             int nearbyZombies = countNearbyZombies(level, player);
-            int toSpawn = Math.min(spawnDensity - nearbyZombies, 5);
-            if (toSpawn <= 0) {
-                DeadSunMod.LOGGER.info("DeadSun: density cap reached ({}/{}), skipping", nearbyZombies, spawnDensity);
-                continue;
-            }
+            int cap = Math.min(spawnDensity, maxDimension);
+            int toSpawn = Math.min(cap - nearbyZombies, 5);
+            if (toSpawn <= 0) continue;
 
-            DeadSunMod.LOGGER.info("DeadSun: trying to spawn {} zombies for {} (nearby: {})", toSpawn, player.getName().getString(), nearbyZombies);
+            boolean playerOnSurface = level.canSeeSky(player.blockPosition().above());
+            boolean isEnd = level.dimension() == Level.END;
+            boolean isNether = level.dimension() == Level.NETHER;
 
-            for (int i = 0; i < toSpawn; i++) {
-                BlockPos pos = findSpawnPosition(level, player, spawnRadius, minDist);
-                if (pos == null) {
-                    DeadSunMod.LOGGER.info("DeadSun: no valid position found after 32 attempts");
-                    continue;
+            if (ModConfig.isGroupSpawningValue() && toSpawn >= 2) {
+                spawnGroup(level, player, toSpawn, spawnRadius, minDist, playerOnSurface, isEnd, isNether);
+            } else {
+                for (int i = 0; i < toSpawn; i++) {
+                    BlockPos pos = findSpawnPosition(level, player, spawnRadius, minDist, playerOnSurface, isEnd, isNether);
+                    if (pos != null) spawnZombie(level, pos);
                 }
-                DeadSunMod.LOGGER.info("DeadSun: spawning zombie at {}", pos);
-                spawnZombie(level, pos);
             }
         }
+    }
+
+    private static int getMaxZombiesForDimension(ServerLevel level) {
+        if (level.dimension() == Level.END) return ModConfig.getMaxZombiesEndValue();
+        if (level.dimension() == Level.NETHER) return ModConfig.getMaxZombiesNetherValue();
+        return ModConfig.getMaxZombiesOverworldValue();
     }
 
     private static int countNearbyZombies(ServerLevel level, ServerPlayer player) {
@@ -70,74 +77,99 @@ public class ZombieSpawnHandler {
         return level.getEntitiesOfClass(Zombie.class, box, e -> true).size();
     }
 
-    private static BlockPos findSpawnPosition(ServerLevel level, ServerPlayer player, int maxDist, int minDist) {
-        boolean isEnd = level.dimension() == net.minecraft.world.level.Level.END;
-        boolean isNether = level.dimension() == net.minecraft.world.level.Level.NETHER;
+    private static void spawnGroup(ServerLevel level, ServerPlayer player, int total, int maxDist, int minDist,
+                                   boolean playerOnSurface, boolean isEnd, boolean isNether) {
+        BlockPos center = findSpawnPosition(level, player, maxDist, minDist, playerOnSurface, isEnd, isNether);
+        if (center == null) return;
 
+        int groupSize = ModConfig.getMinGroupSizeValue()
+                + level.getRandom().nextInt(ModConfig.getMaxGroupSizeValue() - ModConfig.getMinGroupSizeValue() + 1);
+        groupSize = Math.min(groupSize, total);
+
+        spawnZombie(level, center);
+
+        for (int i = 1; i < groupSize; i++) {
+            double offX = (level.getRandom().nextDouble() - 0.5) * 4.0;
+            double offZ = (level.getRandom().nextDouble() - 0.5) * 4.0;
+            int gx = center.getX() + (int) offX;
+            int gz = center.getZ() + (int) offZ;
+
+            int groundY = findGroundY(level, gx, gz, center.getY(), isNether);
+            if (groundY < 0) continue;
+
+            BlockPos gpos = new BlockPos(gx, groundY + 1, gz);
+            if (isValidSpawnPos(level, gpos) && !checkBlockLight(level, gpos) && !isNearbyTorch(level, gpos)) {
+                spawnZombie(level, gpos);
+            }
+        }
+    }
+
+    private static BlockPos findSpawnPosition(ServerLevel level, ServerPlayer player, int maxDist, int minDist,
+                                              boolean playerOnSurface, boolean isEnd, boolean isNether) {
         for (int attempt = 0; attempt < 32; attempt++) {
             double angle = level.getRandom().nextDouble() * Math.PI * 2;
             double dist = minDist + level.getRandom().nextDouble() * (maxDist - minDist);
             int x = (int) (player.getX() + Math.cos(angle) * dist);
             int z = (int) (player.getZ() + Math.sin(angle) * dist);
 
-            int surfaceY;
+            int spawnY;
             if (isNether) {
-                surfaceY = Math.min(level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), 125);
+                int playerY = (int) player.getY();
+                int netherMax = Math.min(125, playerY + 16);
+                int netherMin = Math.max(level.getMinY() + 1, playerY - 16);
+                spawnY = findGroundY(level, x, z, netherMax, true);
+                if (spawnY < netherMin) continue;
+            } else if (!playerOnSurface) {
+                int playerY = (int) player.getY();
+                spawnY = findGroundY(level, x, z, playerY + 8, false);
+                if (spawnY < playerY - 16) continue;
             } else {
-                surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+                int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+                spawnY = findGroundY(level, x, z, surfaceY, false);
             }
 
-            int y = surfaceY;
-            int minY = level.getMinY();
-            while (y > minY && !level.getBlockState(new BlockPos(x, y, z)).blocksMotion()) {
-                y--;
-            }
-            y += 1;
+            if (spawnY < 0) continue;
 
-            BlockPos pos = new BlockPos(x, y, z);
+            BlockPos pos = new BlockPos(x, spawnY + 1, z);
 
-            if (isEnd && !level.canSeeSky(pos)) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: End position {} rejected - no sky", attempt, pos);
-                continue;
-            }
-
-            BlockState below = level.getBlockState(pos.below());
-            BlockState at = level.getBlockState(pos);
-            BlockState above = level.getBlockState(pos.above());
-
-            if (!below.blocksMotion()) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block below ({}) doesn't block motion", attempt, pos, below.getBlock().toString());
-                continue;
-            }
-            if (at.blocksMotion()) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block at position ({}) blocks motion", attempt, pos, at.getBlock().toString());
-                continue;
-            }
-            if (above.blocksMotion()) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block above ({}) blocks motion", attempt, pos, above.getBlock().toString());
-                continue;
-            }
-
-            if (!checkBlockLight(level, pos)) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - block light too high", attempt, pos);
-                continue;
-            }
-
-            if (!isNether && isNearbyTorch(level, pos)) {
-                DeadSunMod.LOGGER.info("DeadSun attempt {}: pos {} rejected - nearby torch", attempt, pos);
-                continue;
-            }
+            if (isEnd && !level.canSeeSky(pos)) continue;
+            if (!isValidSpawnPos(level, pos)) continue;
+            if (!checkBlockLight(level, pos)) continue;
+            if (!isNether && isNearbyTorch(level, pos)) continue;
 
             return pos;
         }
         return null;
     }
 
+    private static int findGroundY(ServerLevel level, int x, int z, int startY, boolean isNether) {
+        int heightmapY = isNether
+                ? Math.min(level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), 125)
+                : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+
+        int fromY = Math.min(startY, heightmapY);
+        int minY = level.getMinY();
+
+        for (int y = fromY; y >= minY; y--) {
+            BlockPos check = new BlockPos(x, y, z);
+            if (level.getBlockState(check).blocksMotion()) {
+                return y;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean isValidSpawnPos(ServerLevel level, BlockPos pos) {
+        BlockState below = level.getBlockState(pos.below());
+        BlockState at = level.getBlockState(pos);
+        BlockState above = level.getBlockState(pos.above());
+        return below.blocksMotion() && !at.blocksMotion() && !above.blocksMotion();
+    }
+
     private static boolean checkBlockLight(ServerLevel level, BlockPos pos) {
         int maxLight = ModConfig.getMaxBlockLightValue();
-        if (maxLight < 0) return true;
-        int blockLight = level.getBrightness(LightLayer.BLOCK, pos);
-        return blockLight <= maxLight;
+        if (maxLight < 0) return false;
+        return level.getBrightness(LightLayer.BLOCK, pos) > maxLight;
     }
 
     private static boolean isNearbyTorch(ServerLevel level, BlockPos pos) {

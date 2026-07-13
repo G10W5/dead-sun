@@ -25,53 +25,78 @@ public class ModConfig {
     private boolean zombiePileUp = true;
     private float leapStrength = 0.6f;
     private float leapHeight = 0.4f;
+    private int maxZombiesOverworld = 50;
+    private int maxZombiesEnd = 150;
+    private int maxZombiesNether = 100;
+    private boolean groupSpawning = true;
+    private int minGroupSize = 2;
+    private int maxGroupSize = 8;
 
-    public int getTorchRadius() {
-        return torchRadius;
-    }
+    public int getTorchRadius() { return torchRadius; }
+    public float getLootBagDropChance() { return lootBagDropChance; }
+    public int getSpawnDensity() { return spawnDensity; }
+    public float getEnderPearlChance() { return enderPearlChance; }
+    public int getSpawnRadius() { return spawnRadius; }
+    public int getMinSpawnDistance() { return minSpawnDistance; }
+    public int getTicksBetweenSpawns() { return ticksBetweenSpawns; }
+    public int getMaxBlockLight() { return maxBlockLight; }
+    public boolean isRequireOpenSky() { return requireOpenSky; }
+    public boolean isZombieLeap() { return zombieLeap; }
+    public boolean isZombiePileUp() { return zombiePileUp; }
+    public float getLeapStrength() { return leapStrength; }
+    public float getLeapHeight() { return leapHeight; }
+    public int getMaxZombiesOverworld() { return maxZombiesOverworld; }
+    public int getMaxZombiesEnd() { return maxZombiesEnd; }
+    public int getMaxZombiesNether() { return maxZombiesNether; }
+    public boolean isGroupSpawning() { return groupSpawning; }
+    public int getMinGroupSize() { return minGroupSize; }
+    public int getMaxGroupSize() { return maxGroupSize; }
 
-    public void setTorchRadius(int torchRadius) {
-        this.torchRadius = torchRadius;
-    }
+    public void setTorchRadius(int v) { this.torchRadius = v; }
+    public void setLootBagDropChance(float v) { this.lootBagDropChance = v; }
+    public void setSpawnDensity(int v) { this.spawnDensity = v; }
+    public void setEnderPearlChance(float v) { this.enderPearlChance = v; }
+    public void setSpawnRadius(int v) { this.spawnRadius = v; }
+    public void setMinSpawnDistance(int v) { this.minSpawnDistance = v; }
+    public void setTicksBetweenSpawns(int v) { this.ticksBetweenSpawns = v; }
+    public void setMaxBlockLight(int v) { this.maxBlockLight = v; }
+    public void setRequireOpenSky(boolean v) { this.requireOpenSky = v; }
+    public void setZombieLeap(boolean v) { this.zombieLeap = v; }
+    public void setZombiePileUp(boolean v) { this.zombiePileUp = v; }
+    public void setLeapStrength(float v) { this.leapStrength = v; }
+    public void setLeapHeight(float v) { this.leapHeight = v; }
+    public void setMaxZombiesOverworld(int v) { this.maxZombiesOverworld = v; }
+    public void setMaxZombiesEnd(int v) { this.maxZombiesEnd = v; }
+    public void setMaxZombiesNether(int v) { this.maxZombiesNether = v; }
+    public void setGroupSpawning(boolean v) { this.groupSpawning = v; }
+    public void setMinGroupSize(int v) { this.minGroupSize = v; }
+    public void setMaxGroupSize(int v) { this.maxGroupSize = v; }
 
-    public float getLootBagDropChance() {
-        return lootBagDropChance;
-    }
+    public static int getSpawnDensityValue() { return INSTANCE.spawnDensity; }
+    public static int getSpawnRadiusValue() { return INSTANCE.spawnRadius; }
+    public static int getMinSpawnDistanceValue() { return INSTANCE.minSpawnDistance; }
+    public static int getTicksBetweenSpawnsValue() { return INSTANCE.ticksBetweenSpawns; }
+    public static int getMaxBlockLightValue() { return INSTANCE.maxBlockLight; }
+    public static boolean isRequireOpenSkyValue() { return INSTANCE.requireOpenSky; }
+    public static int getTorchRadiusValue() { return INSTANCE.torchRadius; }
+    public static float getLootBagDropChanceValue() { return INSTANCE.lootBagDropChance; }
+    public static float getEnderPearlChanceValue() { return INSTANCE.enderPearlChance; }
+    public static boolean isZombieLeapValue() { return INSTANCE.zombieLeap; }
+    public static boolean isZombiePileUpValue() { return INSTANCE.zombiePileUp; }
+    public static float getLeapStrengthValue() { return INSTANCE.leapStrength; }
+    public static float getLeapHeightValue() { return INSTANCE.leapHeight; }
+    public static int getMaxZombiesOverworldValue() { return INSTANCE.maxZombiesOverworld; }
+    public static int getMaxZombiesEndValue() { return INSTANCE.maxZombiesEnd; }
+    public static int getMaxZombiesNetherValue() { return INSTANCE.maxZombiesNether; }
+    public static boolean isGroupSpawningValue() { return INSTANCE.groupSpawning; }
+    public static int getMinGroupSizeValue() { return INSTANCE.minGroupSize; }
+    public static int getMaxGroupSizeValue() { return INSTANCE.maxGroupSize; }
 
-    public void setLootBagDropChance(float lootBagDropChance) {
-        this.lootBagDropChance = lootBagDropChance;
-    }
-
-    public int getSpawnDensity() {
-        return spawnDensity;
-    }
-
-    public void setSpawnDensity(int spawnDensity) {
-        this.spawnDensity = spawnDensity;
-    }
-
-    public float getEnderPearlChance() {
-        return enderPearlChance;
-    }
-
-    public void setEnderPearlChance(float enderPearlChance) {
-        this.enderPearlChance = enderPearlChance;
-    }
-
-    public void setSpawnRadius(int spawnRadius) { this.spawnRadius = spawnRadius; }
-    public void setMinSpawnDistance(int minSpawnDistance) { this.minSpawnDistance = minSpawnDistance; }
-    public void setTicksBetweenSpawns(int ticksBetweenSpawns) { this.ticksBetweenSpawns = ticksBetweenSpawns; }
-    public void setMaxBlockLight(int maxBlockLight) { this.maxBlockLight = maxBlockLight; }
-    public void setRequireOpenSky(boolean requireOpenSky) { this.requireOpenSky = requireOpenSky; }
-    public void setZombieLeap(boolean zombieLeap) { this.zombieLeap = zombieLeap; }
-    public void setZombiePileUp(boolean zombiePileUp) { this.zombiePileUp = zombiePileUp; }
-    public void setLeapStrength(float leapStrength) { this.leapStrength = leapStrength; }
-    public void setLeapHeight(float leapHeight) { this.leapHeight = leapHeight; }
+    public static ModConfig getInstance() { return INSTANCE; }
 
     public static void load() {
         Path configDir = Path.of("config");
         Path configFile = configDir.resolve("deadsun.json");
-
         try {
             if (Files.exists(configFile)) {
                 String json = Files.readString(configFile);
@@ -101,46 +126,4 @@ public class ModConfig {
             DeadSunMod.LOGGER.error("Failed to save config", e);
         }
     }
-
-    public static ModConfig getInstance() {
-        return INSTANCE;
-    }
-
-    public static int getTorchRadiusValue() {
-        return INSTANCE.getTorchRadius();
-    }
-
-    public static float getLootBagDropChanceValue() {
-        return INSTANCE.getLootBagDropChance();
-    }
-
-    public static int getSpawnDensityValue() {
-        return INSTANCE.getSpawnDensity();
-    }
-
-    public static float getEnderPearlChanceValue() {
-        return INSTANCE.getEnderPearlChance();
-    }
-
-    public int getSpawnRadius() { return spawnRadius; }
-    public int getMinSpawnDistance() { return minSpawnDistance; }
-    public int getTicksBetweenSpawns() { return ticksBetweenSpawns; }
-    public int getMaxBlockLight() { return maxBlockLight; }
-    public boolean isRequireOpenSky() { return requireOpenSky; }
-
-    public static int getSpawnRadiusValue() { return INSTANCE.getSpawnRadius(); }
-    public static int getMinSpawnDistanceValue() { return INSTANCE.getMinSpawnDistance(); }
-    public static int getTicksBetweenSpawnsValue() { return INSTANCE.getTicksBetweenSpawns(); }
-    public static int getMaxBlockLightValue() { return INSTANCE.getMaxBlockLight(); }
-    public static boolean isRequireOpenSkyValue() { return INSTANCE.isRequireOpenSky(); }
-
-    public boolean isZombieLeap() { return zombieLeap; }
-    public boolean isZombiePileUp() { return zombiePileUp; }
-    public float getLeapStrength() { return leapStrength; }
-    public float getLeapHeight() { return leapHeight; }
-
-    public static boolean isZombieLeapValue() { return INSTANCE.isZombieLeap(); }
-    public static boolean isZombiePileUpValue() { return INSTANCE.isZombiePileUp(); }
-    public static float getLeapStrengthValue() { return INSTANCE.getLeapStrength(); }
-    public static float getLeapHeightValue() { return INSTANCE.getLeapHeight(); }
 }
