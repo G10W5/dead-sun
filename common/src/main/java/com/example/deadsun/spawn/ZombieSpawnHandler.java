@@ -87,7 +87,13 @@ public class ZombieSpawnHandler {
                 surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
             }
 
-            int y = surfaceY + 1;
+            int y = surfaceY;
+            int minY = level.getMinY();
+            while (y > minY && !level.getBlockState(new BlockPos(x, y, z)).blocksMotion()) {
+                y--;
+            }
+            y += 1;
+
             BlockPos pos = new BlockPos(x, y, z);
 
             if (isEnd && !level.canSeeSky(pos)) {
