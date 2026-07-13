@@ -34,8 +34,8 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.lootBagDropChance.tooltip"))
                 .build());
 
-        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnDensity"), config.getSpawnDensity(), 1, 20)
-                .setDefaultValue(5)
+        general.addEntry(entry.startIntSlider(Component.translatable("config.deadsun.spawnDensity"), config.getSpawnDensity(), 10, 150)
+                .setDefaultValue(50)
                 .setSaveConsumer(config::setSpawnDensity)
                 .setTooltip(Component.translatable("config.deadsun.spawnDensity.tooltip"))
                 .build());

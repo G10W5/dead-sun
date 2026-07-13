@@ -14,7 +14,7 @@ public class ModConfig {
 
     private int torchRadius = 8;
     private float lootBagDropChance = 0.05f;
-    private int spawnDensity = 5;
+    private int spawnDensity = 50;
     private float enderPearlChance = 0.30f;
     private int spawnRadius = 128;
     private int minSpawnDistance = 32;

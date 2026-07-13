@@ -41,7 +41,7 @@ public class ZombieSpawnHandler {
             if (player.isSpectator()) continue;
 
             int nearbyZombies = countNearbyZombies(level, player);
-            int toSpawn = Math.min(spawnDensity - nearbyZombies, 3);
+            int toSpawn = Math.min(spawnDensity - nearbyZombies, 5);
             if (toSpawn <= 0) {
                 DeadSunMod.LOGGER.info("DeadSun: density cap reached ({}/{}), skipping", nearbyZombies, spawnDensity);
                 continue;
