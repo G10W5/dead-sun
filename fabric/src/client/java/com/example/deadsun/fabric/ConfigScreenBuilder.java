@@ -47,6 +47,9 @@ public class ConfigScreenBuilder {
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxGroupSize"), config.getMaxGroupSize(), 4, 16)
                 .setDefaultValue(8).setSaveConsumer(config::setMaxGroupSize)
                 .setTooltip(Component.translatable("config.deadsun.maxGroupSize.tooltip")).build());
+        spawnSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.allowBabyZombies"), config.isAllowBabyZombies())
+                .setDefaultValue(true).setSaveConsumer(config::setAllowBabyZombies)
+                .setTooltip(Component.translatable("config.deadsun.allowBabyZombies.tooltip")).build());
         general.addEntry(spawnSub.build());
 
         // === Subcategory: Dimension Caps ===

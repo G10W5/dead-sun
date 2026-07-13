@@ -39,6 +39,8 @@
     "config.deadsun.minGroupSize.tooltip": "Minimum zombies per group",
     "config.deadsun.maxGroupSize": "Max Group Size",
     "config.deadsun.maxGroupSize.tooltip": "Maximum zombies per group",
+    "config.deadsun.allowBabyZombies": "Allow Baby Zombies",
+    "config.deadsun.allowBabyZombies.tooltip": "Allow baby zombies to spawn",
     "config.deadsun.zombieLeap": "Zombie Leap",
     "config.deadsun.zombieLeap.tooltip": "Zombies leap at players when close (sneaking prevents leap)",
     "config.deadsun.zombiePileUp": "Zombie Pile-Up",

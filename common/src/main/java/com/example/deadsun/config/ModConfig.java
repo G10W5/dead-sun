@@ -33,6 +33,7 @@ public class ModConfig {
     private boolean groupSpawning = true;
     private int minGroupSize = 2;
     private int maxGroupSize = 8;
+    private boolean allowBabyZombies = true;
 
     // --- New fields: Days-Before-Activation ---
     private int daysBeforeActivation = 0;
@@ -78,6 +79,7 @@ public class ModConfig {
     public boolean isGroupSpawning() { return groupSpawning; }
     public int getMinGroupSize() { return minGroupSize; }
     public int getMaxGroupSize() { return maxGroupSize; }
+    public boolean isAllowBabyZombies() { return allowBabyZombies; }
 
     // --- New getters ---
     public int getDaysBeforeActivation() { return daysBeforeActivation; }
@@ -115,6 +117,7 @@ public class ModConfig {
     public void setGroupSpawning(boolean v) { this.groupSpawning = v; }
     public void setMinGroupSize(int v) { this.minGroupSize = v; }
     public void setMaxGroupSize(int v) { this.maxGroupSize = v; }
+    public void setAllowBabyZombies(boolean v) { this.allowBabyZombies = v; }
 
     // --- New setters ---
     public void setDaysBeforeActivation(int v) { this.daysBeforeActivation = v; }
@@ -152,6 +155,7 @@ public class ModConfig {
     public static boolean isGroupSpawningValue() { return INSTANCE.groupSpawning; }
     public static int getMinGroupSizeValue() { return INSTANCE.minGroupSize; }
     public static int getMaxGroupSizeValue() { return INSTANCE.maxGroupSize; }
+    public static boolean isAllowBabyZombiesValue() { return INSTANCE.allowBabyZombies; }
 
     // --- New static accessors ---
     public static int getDaysBeforeActivationValue() { return INSTANCE.daysBeforeActivation; }

@@ -267,6 +267,9 @@ public class ZombieSpawnHandler {
                 level.getRandom().nextFloat() * 360.0f, 0.0f);
         zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(pos),
                 EntitySpawnReason.NATURAL, null);
+        if (!ModConfig.isAllowBabyZombiesValue()) {
+            zombie.setBaby(false);
+        }
         level.addFreshEntity(zombie);
     }
 
