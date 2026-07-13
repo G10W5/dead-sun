@@ -51,11 +51,14 @@ public class ZombieSpawnHandler {
             boolean isEnd = level.dimension() == Level.END;
             boolean isNether = level.dimension() == Level.NETHER;
 
+            int effectiveMaxDist = playerOnSurface || isEnd ? spawnRadius : Math.min(spawnRadius, 24);
+            int effectiveMinDist = playerOnSurface || isEnd ? minDist : Math.min(minDist, 8);
+
             if (ModConfig.isGroupSpawningValue() && toSpawn >= 2 && !isEnd && !isNether) {
-                spawnGroup(level, player, toSpawn, spawnRadius, minDist, playerOnSurface, isEnd, isNether);
+                spawnGroup(level, player, toSpawn, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
             } else {
                 for (int i = 0; i < toSpawn; i++) {
-                    BlockPos pos = findSpawnPosition(level, player, spawnRadius, minDist, playerOnSurface, isEnd, isNether);
+                    BlockPos pos = findSpawnPosition(level, player, effectiveMaxDist, effectiveMinDist, playerOnSurface, isEnd, isNether);
                     if (pos != null) spawnZombie(level, pos);
                 }
             }

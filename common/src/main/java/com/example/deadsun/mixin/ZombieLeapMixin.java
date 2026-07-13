@@ -60,14 +60,23 @@ public abstract class ZombieLeapMixin {
     private void deadsun$tryPileUp(Zombie self) {
         if (!ModConfig.isZombiePileUpValue()) return;
         if (deadsun$pileUpCooldown > 0) { deadsun$pileUpCooldown--; return; }
+        if (!self.onGround()) return;
 
         ServerLevel level = (ServerLevel) self.level();
+        boolean stuck = self.getTarget() != null
+                && !self.getNavigation().isInProgress()
+                && Math.abs(self.getDeltaMovement().x) < 0.05
+                && Math.abs(self.getDeltaMovement().z) < 0.05;
 
-        AABB searchBox = self.getBoundingBox().inflate(0.5, 0.0, 0.5);
-        List<Zombie> overlapping = level.getEntitiesOfClass(Zombie.class, searchBox,
-                z -> z != self && z.onGround() && Math.abs(z.getX() - self.getX()) < 0.5 && Math.abs(z.getZ() - self.getZ()) < 0.5);
+        boolean overlapping = false;
+        if (!stuck) {
+            AABB searchBox = self.getBoundingBox().inflate(0.5, 0.0, 0.5);
+            List<Zombie> nearby = level.getEntitiesOfClass(Zombie.class, searchBox,
+                    z -> z != self && z.onGround() && Math.abs(z.getX() - self.getX()) < 0.5 && Math.abs(z.getZ() - self.getZ()) < 0.5);
+            overlapping = !nearby.isEmpty();
+        }
 
-        if (overlapping.isEmpty()) return;
+        if (!stuck && !overlapping) return;
 
         float rand = 0.12f + self.getRandom().nextFloat() * 0.04f;
 

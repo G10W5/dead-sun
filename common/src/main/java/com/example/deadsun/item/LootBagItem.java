@@ -26,8 +26,7 @@ public class LootBagItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide() && level instanceof ServerLevel serverLevel) {
-            boolean isEnd = level.dimension() == Level.END;
-            ItemStack reward = rollReward(serverLevel.getRandom(), isEnd);
+            ItemStack reward = rollReward(serverLevel.getRandom(), level);
 
             MutableComponent name = Component.literal(reward.getHoverName().getString())
                     .withStyle(ChatFormatting.GREEN);
@@ -46,11 +45,31 @@ public class LootBagItem extends Item {
         return InteractionResult.SUCCESS;
     }
 
-    private ItemStack rollReward(RandomSource random, boolean isEnd) {
-        if (isEnd) {
+    private ItemStack rollReward(RandomSource random, Level level) {
+        if (level.dimension() == Level.END) {
             return rollEndReward(random);
         }
+        if (level.dimension() == Level.NETHER) {
+            return rollNetherReward(random);
+        }
         return rollOverworldReward(random);
+    }
+
+    private ItemStack rollNetherReward(RandomSource random) {
+        float roll = random.nextFloat();
+        if (roll < 0.25f) {
+            return new ItemStack(Items.GUNPOWDER, random.nextIntBetweenInclusive(1, 4));
+        } else if (roll < 0.45f) {
+            return new ItemStack(Items.BONE, random.nextIntBetweenInclusive(1, 3));
+        } else if (roll < 0.60f) {
+            return new ItemStack(Items.BLAZE_POWDER, random.nextIntBetweenInclusive(1, 2));
+        } else if (roll < 0.75f) {
+            return new ItemStack(Items.STRING, random.nextIntBetweenInclusive(2, 4));
+        } else if (roll < 0.88f) {
+            return new ItemStack(Items.GHAST_TEAR, random.nextIntBetweenInclusive(1, 2));
+        } else {
+            return new ItemStack(Items.EXPERIENCE_BOTTLE, random.nextIntBetweenInclusive(3, 7));
+        }
     }
 
     private ItemStack rollOverworldReward(RandomSource random) {
