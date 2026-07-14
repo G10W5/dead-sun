@@ -10,8 +10,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 public class ModItems {
-    public static final Item LOOT_BAG = register("loot_bag",
-            props -> new LootBagItem(props.stacksTo(16)));
+    public static Item LOOT_BAG;
+
+    public static void register() {
+        LOOT_BAG = register("loot_bag", props -> new LootBagItem(props.stacksTo(16)));
+        DeadSunMod.LOGGER.info("Registered items for " + DeadSunMod.MOD_ID);
+    }
 
     private static Item register(String name, java.util.function.Function<Item.Properties, Item> factory) {
         ResourceKey<Item> key = ResourceKey.create(
@@ -21,9 +25,5 @@ public class ModItems {
         Item item = factory.apply(props);
         Registry.register(BuiltInRegistries.ITEM, key, item);
         return item;
-    }
-
-    public static void register() {
-        DeadSunMod.LOGGER.info("Registering items for " + DeadSunMod.MOD_ID);
     }
 }
