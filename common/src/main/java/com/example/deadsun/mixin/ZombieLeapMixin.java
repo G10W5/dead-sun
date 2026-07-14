@@ -40,6 +40,15 @@ public abstract class ZombieLeapMixin {
     @Unique
     private double deadsun$climbTargetY = 0;
 
+    @Unique
+    private int deadsun$crestTicks = 0;
+
+    @Unique
+    private double deadsun$crestDirX = 0;
+
+    @Unique
+    private double deadsun$crestDirZ = 0;
+
     @Inject(method = "tick", at = @At("RETURN"))
     private void deadsun$zombieTick(CallbackInfo ci) {
         Zombie self = (Zombie) (Object) this;
@@ -86,12 +95,17 @@ public abstract class ZombieLeapMixin {
 
         ServerLevel level = (ServerLevel) self.level();
 
-        if (deadsun$isClimbing) {
+        if (deadsun$isClimbing || deadsun$crestTicks > 0) {
             if (self.getTarget() == null) {
                 deadsun$isClimbing = false;
+                deadsun$crestTicks = 0;
                 return;
             }
-            deadsun$continueClimb(self, level);
+            if (deadsun$crestTicks > 0) {
+                deadsun$continueCrest(self, level);
+            } else {
+                deadsun$continueClimb(self, level);
+            }
             return;
         }
 
@@ -129,6 +143,17 @@ public abstract class ZombieLeapMixin {
 
         deadsun$isClimbing = true;
         deadsun$climbTargetY = self.getY() + heightGain;
+
+        net.minecraft.world.entity.player.Player nearest = level.getNearestPlayer(self, 16.0);
+        if (nearest != null) {
+            Vec3 toTarget = nearest.position().subtract(self.position()).normalize();
+            deadsun$crestDirX = toTarget.x;
+            deadsun$crestDirZ = toTarget.z;
+        } else {
+            deadsun$crestDirX = dirX;
+            deadsun$crestDirZ = dirZ;
+        }
+
         deadsun$pileUpCooldown = 10 + self.getRandom().nextInt(8);
     }
 
@@ -136,18 +161,39 @@ public abstract class ZombieLeapMixin {
     private void deadsun$continueClimb(Zombie self, ServerLevel level) {
         if (self.getY() >= deadsun$climbTargetY) {
             deadsun$isClimbing = false;
+            deadsun$crestTicks = 6;
             return;
         }
 
         BlockPos above = self.blockPosition().above();
         if (level.getBlockState(above).blocksMotion()) {
             deadsun$isClimbing = false;
+            deadsun$crestTicks = 6;
             return;
         }
 
         double climbSpeed = 0.2;
         self.setDeltaMovement(0, 0, 0);
         self.move(MoverType.SELF, new Vec3(0, climbSpeed, 0));
+        self.fallDistance = 0;
+        self.hurtMarked = true;
+        self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
+    }
+
+    @Unique
+    private void deadsun$continueCrest(Zombie self, ServerLevel level) {
+        deadsun$crestTicks--;
+        if (deadsun$crestTicks <= 0) {
+            return;
+        }
+
+        double crestSpeed = 0.3;
+        self.setDeltaMovement(0, 0, 0);
+        self.move(MoverType.SELF, new Vec3(
+                deadsun$crestDirX * crestSpeed,
+                0.05,
+                deadsun$crestDirZ * crestSpeed
+        ));
         self.fallDistance = 0;
         self.hurtMarked = true;
         self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
