@@ -90,7 +90,8 @@ public abstract class ZombieLeapMixin {
             return;
         }
 
-        if (!self.horizontalCollision) {
+        boolean navGaveUp = self.getNavigation().isDone();
+        if (!self.horizontalCollision && !navGaveUp) {
             deadsun$stuckTicks = 0;
             return;
         }
