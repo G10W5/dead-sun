@@ -72,6 +72,20 @@ public class ModConfig {
     private float alphaScale = 1.5f;
     private float alphaAttackDamage = 5.0f;
 
+    // --- New fields: Zombie Variants ---
+    private boolean zombieVariants = true;
+    private float runnerChance = 0.05f;
+    private float runnerSpeedBoost = 0.5f;
+    private float jumperChance = 0.03f;
+    private float jumperLeapBoost = 0.5f;
+    private float exploderChance = 0.02f;
+    private float bruteChance = 0.03f;
+    private float bruteSpeedMultiplier = 0.6f;
+    private int bruteStrengthLevel = 1;
+    private int exploderFuseTime = 40;
+    private float exploderExplosionRadius = 3.0f;
+    private boolean exploderDestroysBlocks = true;
+
     // --- New fields: Coordinated Flanking ---
     private boolean coordinatedFlanking = true;
     private int flankingUpdateInterval = 10;
@@ -130,6 +144,18 @@ public class ModConfig {
     public int getAlphaHealth() { return alphaHealth; }
     public float getAlphaScale() { return alphaScale; }
     public float getAlphaAttackDamage() { return alphaAttackDamage; }
+    public boolean isZombieVariants() { return zombieVariants; }
+    public float getRunnerChance() { return runnerChance; }
+    public float getRunnerSpeedBoost() { return runnerSpeedBoost; }
+    public float getJumperChance() { return jumperChance; }
+    public float getJumperLeapBoost() { return jumperLeapBoost; }
+    public float getExploderChance() { return exploderChance; }
+    public float getBruteChance() { return bruteChance; }
+    public float getBruteSpeedMultiplier() { return bruteSpeedMultiplier; }
+    public int getBruteStrengthLevel() { return bruteStrengthLevel; }
+    public int getExploderFuseTime() { return exploderFuseTime; }
+    public float getExploderExplosionRadius() { return exploderExplosionRadius; }
+    public boolean isExploderDestroysBlocks() { return exploderDestroysBlocks; }
     public boolean isCoordinatedFlanking() { return coordinatedFlanking; }
     public int getFlankingUpdateInterval() { return flankingUpdateInterval; }
     public int getFlankingRange() { return flankingRange; }
@@ -187,6 +213,18 @@ public class ModConfig {
     public void setAlphaHealth(int v) { this.alphaHealth = v; }
     public void setAlphaScale(float v) { this.alphaScale = v; }
     public void setAlphaAttackDamage(float v) { this.alphaAttackDamage = v; }
+    public void setZombieVariants(boolean v) { this.zombieVariants = v; }
+    public void setRunnerChance(float v) { this.runnerChance = v; }
+    public void setRunnerSpeedBoost(float v) { this.runnerSpeedBoost = v; }
+    public void setJumperChance(float v) { this.jumperChance = v; }
+    public void setJumperLeapBoost(float v) { this.jumperLeapBoost = v; }
+    public void setExploderChance(float v) { this.exploderChance = v; }
+    public void setBruteChance(float v) { this.bruteChance = v; }
+    public void setBruteSpeedMultiplier(float v) { this.bruteSpeedMultiplier = v; }
+    public void setBruteStrengthLevel(int v) { this.bruteStrengthLevel = v; }
+    public void setExploderFuseTime(int v) { this.exploderFuseTime = v; }
+    public void setExploderExplosionRadius(float v) { this.exploderExplosionRadius = v; }
+    public void setExploderDestroysBlocks(boolean v) { this.exploderDestroysBlocks = v; }
     public void setCoordinatedFlanking(boolean v) { this.coordinatedFlanking = v; }
     public void setFlankingUpdateInterval(int v) { this.flankingUpdateInterval = v; }
     public void setFlankingRange(int v) { this.flankingRange = v; }
@@ -244,6 +282,18 @@ public class ModConfig {
     public static int getAlphaHealthValue() { return INSTANCE.alphaHealth; }
     public static float getAlphaScaleValue() { return INSTANCE.alphaScale; }
     public static float getAlphaAttackDamageValue() { return INSTANCE.alphaAttackDamage; }
+    public static boolean isZombieVariantsValue() { return INSTANCE.zombieVariants; }
+    public static float getRunnerChanceValue() { return INSTANCE.runnerChance; }
+    public static float getRunnerSpeedBoostValue() { return INSTANCE.runnerSpeedBoost; }
+    public static float getJumperChanceValue() { return INSTANCE.jumperChance; }
+    public static float getJumperLeapBoostValue() { return INSTANCE.jumperLeapBoost; }
+    public static float getExploderChanceValue() { return INSTANCE.exploderChance; }
+    public static float getBruteChanceValue() { return INSTANCE.bruteChance; }
+    public static float getBruteSpeedMultiplierValue() { return INSTANCE.bruteSpeedMultiplier; }
+    public static int getBruteStrengthLevelValue() { return INSTANCE.bruteStrengthLevel; }
+    public static int getExploderFuseTimeValue() { return INSTANCE.exploderFuseTime; }
+    public static float getExploderExplosionRadiusValue() { return INSTANCE.exploderExplosionRadius; }
+    public static boolean isExploderDestroysBlocksValue() { return INSTANCE.exploderDestroysBlocks; }
     public static boolean isCoordinatedFlankingValue() { return INSTANCE.coordinatedFlanking; }
     public static int getFlankingUpdateIntervalValue() { return INSTANCE.flankingUpdateInterval; }
     public static int getFlankingRangeValue() { return INSTANCE.flankingRange; }

@@ -3,6 +3,7 @@ package com.example.deadsun.mixin;
 import com.example.deadsun.awareness.AlphaZombieHandler;
 import com.example.deadsun.awareness.LightTrackingHandler;
 import com.example.deadsun.awareness.NoisyZombieHandler;
+import com.example.deadsun.awareness.ZombieVariantHandler;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -52,6 +53,7 @@ public abstract class ZombieLeapMixin {
 
         LightTrackingHandler.tick(level, self);
         NoisyZombieHandler.tick(level, self);
+        ZombieVariantHandler.tickVariant(level, self);
         AlphaZombieHandler.tickParticles(self);
     }
 
@@ -72,6 +74,12 @@ public abstract class ZombieLeapMixin {
         Vec3 dir = target.position().subtract(self.position()).normalize();
         float strength = ModConfig.getLeapStrengthValue();
         float height = ModConfig.getLeapHeightValue();
+
+        if (ZombieVariantHandler.isJumper(self)) {
+            float boost = ModConfig.getJumperLeapBoostValue();
+            strength *= (1.0f + boost);
+            height *= (1.0f + boost);
+        }
 
         self.setDeltaMovement(dir.x * strength, height, dir.z * strength);
         self.hurtMarked = true;

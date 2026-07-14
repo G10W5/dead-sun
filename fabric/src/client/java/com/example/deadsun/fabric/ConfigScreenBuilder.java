@@ -200,6 +200,45 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.alphaAttackDamage.tooltip")).build());
         general.addEntry(alphaSub.build());
 
+        SubCategoryBuilder variantSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.variants"));
+        variantSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.zombieVariants"), config.isZombieVariants())
+                .setDefaultValue(true).setSaveConsumer(config::setZombieVariants)
+                .setTooltip(Component.translatable("config.deadsun.zombieVariants.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.runnerChance"), config.getRunnerChance())
+                .setDefaultValue(0.05f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setRunnerChance)
+                .setTooltip(Component.translatable("config.deadsun.runnerChance.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.runnerSpeedBoost"), config.getRunnerSpeedBoost())
+                .setDefaultValue(0.5f).setMin(0.1f).setMax(2.0f).setSaveConsumer(config::setRunnerSpeedBoost)
+                .setTooltip(Component.translatable("config.deadsun.runnerSpeedBoost.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.jumperChance"), config.getJumperChance())
+                .setDefaultValue(0.03f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setJumperChance)
+                .setTooltip(Component.translatable("config.deadsun.jumperChance.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.jumperLeapBoost"), config.getJumperLeapBoost())
+                .setDefaultValue(0.5f).setMin(0.1f).setMax(2.0f).setSaveConsumer(config::setJumperLeapBoost)
+                .setTooltip(Component.translatable("config.deadsun.jumperLeapBoost.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.exploderChance"), config.getExploderChance())
+                .setDefaultValue(0.02f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setExploderChance)
+                .setTooltip(Component.translatable("config.deadsun.exploderChance.tooltip")).build());
+        variantSub.add(entry.startIntSlider(Component.translatable("config.deadsun.exploderFuseTime"), config.getExploderFuseTime(), 20, 80)
+                .setDefaultValue(40).setSaveConsumer(config::setExploderFuseTime)
+                .setTooltip(Component.translatable("config.deadsun.exploderFuseTime.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.exploderExplosionRadius"), config.getExploderExplosionRadius())
+                .setDefaultValue(3.0f).setMin(1.0f).setMax(8.0f).setSaveConsumer(config::setExploderExplosionRadius)
+                .setTooltip(Component.translatable("config.deadsun.exploderExplosionRadius.tooltip")).build());
+        variantSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.exploderDestroysBlocks"), config.isExploderDestroysBlocks())
+                .setDefaultValue(true).setSaveConsumer(config::setExploderDestroysBlocks)
+                .setTooltip(Component.translatable("config.deadsun.exploderDestroysBlocks.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.bruteChance"), config.getBruteChance())
+                .setDefaultValue(0.03f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setBruteChance)
+                .setTooltip(Component.translatable("config.deadsun.bruteChance.tooltip")).build());
+        variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.bruteSpeedMultiplier"), config.getBruteSpeedMultiplier())
+                .setDefaultValue(0.6f).setMin(0.1f).setMax(1.0f).setSaveConsumer(config::setBruteSpeedMultiplier)
+                .setTooltip(Component.translatable("config.deadsun.bruteSpeedMultiplier.tooltip")).build());
+        variantSub.add(entry.startIntSlider(Component.translatable("config.deadsun.bruteStrengthLevel"), config.getBruteStrengthLevel(), 1, 5)
+                .setDefaultValue(1).setSaveConsumer(config::setBruteStrengthLevel)
+                .setTooltip(Component.translatable("config.deadsun.bruteStrengthLevel.tooltip")).build());
+        general.addEntry(variantSub.build());
+
         SubCategoryBuilder flankSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.flanking"));
         flankSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.coordinatedFlanking"), config.isCoordinatedFlanking())
                 .setDefaultValue(true).setSaveConsumer(config::setCoordinatedFlanking)

@@ -6,6 +6,7 @@ import com.example.deadsun.awareness.FlankingHandler;
 import com.example.deadsun.awareness.HordeHandler;
 import com.example.deadsun.awareness.LightTrackingHandler;
 import com.example.deadsun.awareness.SoundTrackingHandler;
+import com.example.deadsun.awareness.ZombieVariantHandler;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -274,6 +275,7 @@ public class ZombieSpawnHandler {
         if (AlphaZombieHandler.shouldSpawnAlpha(level)) {
             AlphaZombieHandler.markAsAlpha(zombie);
         }
+        ZombieVariantHandler.assignVariant(zombie);
         level.addFreshEntity(zombie);
     }
 
