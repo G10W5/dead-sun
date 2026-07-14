@@ -108,7 +108,8 @@ public abstract class ZombieLeapMixin {
             return;
         }
 
-        if (!self.horizontalCollision && !self.getNavigation().isDone()) {
+        if (!self.horizontalCollision && !self.getNavigation().isDone()
+                && !deadsun$targetBehindWall(self, self.getTarget(), level)) {
             deadsun$stuckTicks = Math.max(0, deadsun$stuckTicks - 2);
             return;
         }
@@ -249,6 +250,23 @@ public abstract class ZombieLeapMixin {
             }
         }
         return height;
+    }
+
+    @Unique
+    private static boolean deadsun$targetBehindWall(Zombie self, net.minecraft.world.entity.LivingEntity target, ServerLevel level) {
+        double dist = self.distanceTo(target);
+        if (dist > 16.0 || dist < 1.0) return false;
+
+        Vec3 dir = target.position().subtract(self.position()).normalize();
+        int steps = (int) Math.ceil(dist);
+        for (int i = 1; i <= steps; i++) {
+            BlockPos check = self.blockPosition().offset(
+                    (int) Math.round(dir.x * i), 0, (int) Math.round(dir.z * i));
+            if (level.getBlockState(check).blocksMotion()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Unique
