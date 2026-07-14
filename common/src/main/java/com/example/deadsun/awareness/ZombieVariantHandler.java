@@ -32,7 +32,6 @@ public class ZombieVariantHandler {
 
     private static final Identifier SPEED_MOD_ID = Identifier.fromNamespaceAndPath("deadsun", "runner_speed");
     private static final Identifier BRUTE_SPEED_MOD_ID = Identifier.fromNamespaceAndPath("deadsun", "brute_speed");
-    private static final Identifier BRUTE_SCALE_MOD_ID = Identifier.fromNamespaceAndPath("deadsun", "brute_scale");
     private static final Map<Integer, Integer> FUSE_TIMERS = new HashMap<>();
 
     public static void assignVariant(Zombie zombie) {
@@ -63,6 +62,8 @@ public class ZombieVariantHandler {
 
         if (variant.equals(RUNNER)) {
             applyRunnerSpeed(zombie);
+        } else if (variant.equals(JUMPER)) {
+            zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(Items.FEATHER));
         } else if (variant.equals(EXPLODER)) {
             zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(Items.TNT));
         } else if (variant.equals(BRUTE)) {
@@ -86,12 +87,7 @@ public class ZombieVariantHandler {
             speedAttr.addPermanentModifier(new AttributeModifier(
                     BRUTE_SPEED_MOD_ID, speedMult, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
-        float scaleBonus = 0.2f;
-        AttributeInstance scaleAttr = zombie.getAttribute(Attributes.SCALE);
-        if (scaleAttr != null) {
-            scaleAttr.addPermanentModifier(new AttributeModifier(
-                    BRUTE_SCALE_MOD_ID, scaleBonus, AttributeModifier.Operation.ADD_VALUE));
-        }
+        zombie.setItemSlot(net.minecraft.world.entity.EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         int strengthLevel = ModConfig.getBruteStrengthLevelValue();
         zombie.addEffect(new MobEffectInstance(MobEffects.STRENGTH, -1, strengthLevel - 1, false, false));
     }
@@ -141,28 +137,26 @@ public class ZombieVariantHandler {
     private static void tickJumper(ServerLevel level, Zombie zombie) {
         if (zombie.onGround() && zombie.getTarget() != null) {
             double dist = zombie.distanceTo(zombie.getTarget());
-            if (dist < 8.0 && dist > 2.0 && zombie.getRandom().nextInt(40) == 0) {
+            if (dist < 8.0 && dist > 2.0 && zombie.getRandom().nextInt(30) == 0) {
                 float boost = ModConfig.getJumperLeapBoostValue();
                 zombie.setDeltaMovement(
                         zombie.getDeltaMovement().x(),
-                        0.5 + boost,
+                        0.6 + boost,
                         zombie.getDeltaMovement().z()
                 );
                 zombie.fallDistance = 0;
                 zombie.hurtMarked = true;
                 level.sendParticles(ParticleTypes.CLOUD,
                         zombie.getX(), zombie.getY(), zombie.getZ(),
-                        3, 0.3, 0.1, 0.3, 0.01);
+                        5, 0.4, 0.2, 0.4, 0.02);
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                        zombie.getX(), zombie.getY() + 0.5, zombie.getZ(),
+                        3, 0.3, 0.3, 0.3, 0.0);
             }
         }
     }
 
     private static void tickBrute(ServerLevel level, Zombie zombie) {
-        if (zombie.tickCount % 30 == 0) {
-            level.sendParticles(ParticleTypes.ANGRY_VILLAGER,
-                    zombie.getX(), zombie.getY() + 1.5, zombie.getZ(),
-                    2, 0.3, 0.3, 0.3, 0.01);
-        }
     }
 
     private static void tickExploder(ServerLevel level, Zombie zombie) {
@@ -172,14 +166,15 @@ public class ZombieVariantHandler {
 
         double dist = zombie.distanceTo(nearest);
         int entityId = zombie.getId();
+        boolean alreadyFusing = FUSE_TIMERS.containsKey(entityId);
 
-        if (dist <= 3.0) {
-            if (!FUSE_TIMERS.containsKey(entityId)) {
-                FUSE_TIMERS.put(entityId, ModConfig.getExploderFuseTimeValue());
-                zombie.playSound(SoundEvents.TNT_PRIMED, 1.0f, 1.0f);
-            }
+        if (dist <= 3.0 && !alreadyFusing) {
+            FUSE_TIMERS.put(entityId, ModConfig.getExploderFuseTimeValue());
+            zombie.playSound(SoundEvents.TNT_PRIMED, 1.0f, 1.0f);
+        }
 
-            int fuse = FUSE_TIMERS.get(entityId);
+        if (alreadyFusing || dist <= 3.0) {
+            int fuse = FUSE_TIMERS.getOrDefault(entityId, ModConfig.getExploderFuseTimeValue());
             fuse--;
             FUSE_TIMERS.put(entityId, fuse);
 
@@ -192,18 +187,13 @@ public class ZombieVariantHandler {
             if (fuse <= 0) {
                 FUSE_TIMERS.remove(entityId);
                 float radius = ModConfig.getExploderExplosionRadiusValue();
-                boolean fire = false;
                 boolean blocks = ModConfig.isExploderDestroysBlocksValue();
 
                 level.explode(zombie, zombie.getX(), zombie.getY() + 0.5, zombie.getZ(),
-                        radius, fire,
+                        radius, false,
                         blocks ? Level.ExplosionInteraction.MOB : Level.ExplosionInteraction.NONE);
 
                 zombie.discard();
-            }
-        } else {
-            if (FUSE_TIMERS.containsKey(entityId)) {
-                FUSE_TIMERS.remove(entityId);
             }
         }
     }

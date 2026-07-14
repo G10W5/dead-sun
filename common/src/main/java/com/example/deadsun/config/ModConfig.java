@@ -75,7 +75,7 @@ public class ModConfig {
     // --- New fields: Zombie Variants ---
     private boolean zombieVariants = true;
     private float runnerChance = 0.05f;
-    private float runnerSpeedBoost = 0.5f;
+    private float runnerSpeedBoost = 1.0f;
     private float jumperChance = 0.03f;
     private float jumperLeapBoost = 0.5f;
     private float exploderChance = 0.02f;

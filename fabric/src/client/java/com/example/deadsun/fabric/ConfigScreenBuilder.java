@@ -208,7 +208,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(0.05f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setRunnerChance)
                 .setTooltip(Component.translatable("config.deadsun.runnerChance.tooltip")).build());
         variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.runnerSpeedBoost"), config.getRunnerSpeedBoost())
-                .setDefaultValue(0.5f).setMin(0.1f).setMax(2.0f).setSaveConsumer(config::setRunnerSpeedBoost)
+                .setDefaultValue(1.0f).setMin(0.1f).setMax(3.0f).setSaveConsumer(config::setRunnerSpeedBoost)
                 .setTooltip(Component.translatable("config.deadsun.runnerSpeedBoost.tooltip")).build());
         variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.jumperChance"), config.getJumperChance())
                 .setDefaultValue(0.03f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setJumperChance)
