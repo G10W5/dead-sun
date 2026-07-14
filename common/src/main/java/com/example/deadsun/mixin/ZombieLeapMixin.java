@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -32,6 +33,12 @@ public abstract class ZombieLeapMixin {
 
     @Unique
     private int deadsun$stuckTicks = 0;
+
+    @Unique
+    private boolean deadsun$isClimbing = false;
+
+    @Unique
+    private double deadsun$climbTargetY = 0;
 
     @Inject(method = "tick", at = @At("RETURN"))
     private void deadsun$zombieTick(CallbackInfo ci) {
@@ -76,9 +83,19 @@ public abstract class ZombieLeapMixin {
     private void deadsun$tryPileUp(Zombie self) {
         if (!ModConfig.isZombiePileUpValue()) return;
         if (deadsun$pileUpCooldown > 0) { deadsun$pileUpCooldown--; return; }
-        if (self.getTarget() == null) return;
 
         ServerLevel level = (ServerLevel) self.level();
+
+        if (deadsun$isClimbing) {
+            if (self.getTarget() == null) {
+                deadsun$isClimbing = false;
+                return;
+            }
+            deadsun$continueClimb(self, level);
+            return;
+        }
+
+        if (self.getTarget() == null) return;
 
         float yRot = self.getYRot();
         double dirX = -Math.sin(Math.toRadians(yRot));
@@ -110,19 +127,30 @@ public abstract class ZombieLeapMixin {
         double climbTarget = Math.min(pileTopY + 1.1, self.getY() + wallHeight + 0.5);
         double heightGain = Math.max(0.5, climbTarget - self.getY());
 
-        float vertBoost = (float) Math.min(heightGain * 0.42, 0.55);
-        float horizBoost = 0.22f + (wallHeight - 2) * 0.03f;
+        deadsun$isClimbing = true;
+        deadsun$climbTargetY = self.getY() + heightGain;
+        deadsun$pileUpCooldown = 10 + self.getRandom().nextInt(8);
+    }
 
-        self.setDeltaMovement(
-                self.getDeltaMovement().x() + dirX * horizBoost,
-                vertBoost + self.getRandom().nextFloat() * 0.05f,
-                self.getDeltaMovement().z() + dirZ * horizBoost
-        );
+    @Unique
+    private void deadsun$continueClimb(Zombie self, ServerLevel level) {
+        if (self.getY() >= deadsun$climbTargetY) {
+            deadsun$isClimbing = false;
+            return;
+        }
+
+        BlockPos above = self.blockPosition().above();
+        if (level.getBlockState(above).blocksMotion()) {
+            deadsun$isClimbing = false;
+            return;
+        }
+
+        double climbSpeed = 0.2;
+        self.setDeltaMovement(0, 0, 0);
+        self.move(MoverType.SELF, new Vec3(0, climbSpeed, 0));
         self.fallDistance = 0;
         self.hurtMarked = true;
         self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
-
-        deadsun$pileUpCooldown = 10 + self.getRandom().nextInt(8);
     }
 
     @Unique
