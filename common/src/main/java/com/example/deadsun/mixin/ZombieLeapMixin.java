@@ -165,13 +165,6 @@ public abstract class ZombieLeapMixin {
             return;
         }
 
-        BlockPos above = self.blockPosition().above();
-        if (level.getBlockState(above).blocksMotion()) {
-            deadsun$isClimbing = false;
-            deadsun$crestTicks = 6;
-            return;
-        }
-
         double climbSpeed = 0.2;
         self.setDeltaMovement(0, 0, 0);
         self.move(MoverType.SELF, new Vec3(0, climbSpeed, 0));
@@ -217,7 +210,7 @@ public abstract class ZombieLeapMixin {
     @Unique
     private static int deadsun$wallHeight(ServerLevel level, BlockPos front) {
         int height = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             if (level.getBlockState(front.above(i)).blocksMotion()) {
                 height++;
             } else {
