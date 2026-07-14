@@ -66,6 +66,15 @@ public class ModConfig {
     private float alphaScale = 1.5f;
     private float alphaAttackDamage = 5.0f;
 
+    // --- New fields: Coordinated Flanking ---
+    private boolean coordinatedFlanking = true;
+    private int flankingUpdateInterval = 10;
+    private int flankingRange = 32;
+    private int flankingMinGroupSize = 3;
+    private double flankingRadius = 6.0;
+    private double flankingEngageDistance = 4.0;
+    private double flankingNavSpeed = 1.0;
+
     // --- Existing getters ---
     public int getTorchRadius() { return torchRadius; }
     public float getLootBagDropChance() { return lootBagDropChance; }
@@ -109,6 +118,13 @@ public class ModConfig {
     public int getAlphaHealth() { return alphaHealth; }
     public float getAlphaScale() { return alphaScale; }
     public float getAlphaAttackDamage() { return alphaAttackDamage; }
+    public boolean isCoordinatedFlanking() { return coordinatedFlanking; }
+    public int getFlankingUpdateInterval() { return flankingUpdateInterval; }
+    public int getFlankingRange() { return flankingRange; }
+    public int getFlankingMinGroupSize() { return flankingMinGroupSize; }
+    public double getFlankingRadius() { return flankingRadius; }
+    public double getFlankingEngageDistance() { return flankingEngageDistance; }
+    public double getFlankingNavSpeed() { return flankingNavSpeed; }
 
     // --- Existing setters ---
     public void setTorchRadius(int v) { this.torchRadius = v; }
@@ -153,6 +169,13 @@ public class ModConfig {
     public void setAlphaHealth(int v) { this.alphaHealth = v; }
     public void setAlphaScale(float v) { this.alphaScale = v; }
     public void setAlphaAttackDamage(float v) { this.alphaAttackDamage = v; }
+    public void setCoordinatedFlanking(boolean v) { this.coordinatedFlanking = v; }
+    public void setFlankingUpdateInterval(int v) { this.flankingUpdateInterval = v; }
+    public void setFlankingRange(int v) { this.flankingRange = v; }
+    public void setFlankingMinGroupSize(int v) { this.flankingMinGroupSize = v; }
+    public void setFlankingRadius(double v) { this.flankingRadius = v; }
+    public void setFlankingEngageDistance(double v) { this.flankingEngageDistance = v; }
+    public void setFlankingNavSpeed(double v) { this.flankingNavSpeed = v; }
 
     // --- Existing static accessors ---
     public static int getSpawnDensityValue() { return INSTANCE.spawnDensity; }
@@ -197,6 +220,13 @@ public class ModConfig {
     public static int getAlphaHealthValue() { return INSTANCE.alphaHealth; }
     public static float getAlphaScaleValue() { return INSTANCE.alphaScale; }
     public static float getAlphaAttackDamageValue() { return INSTANCE.alphaAttackDamage; }
+    public static boolean isCoordinatedFlankingValue() { return INSTANCE.coordinatedFlanking; }
+    public static int getFlankingUpdateIntervalValue() { return INSTANCE.flankingUpdateInterval; }
+    public static int getFlankingRangeValue() { return INSTANCE.flankingRange; }
+    public static int getFlankingMinGroupSizeValue() { return INSTANCE.flankingMinGroupSize; }
+    public static double getFlankingRadiusValue() { return INSTANCE.flankingRadius; }
+    public static double getFlankingEngageDistanceValue() { return INSTANCE.flankingEngageDistance; }
+    public static double getFlankingNavSpeedValue() { return INSTANCE.flankingNavSpeed; }
 
     public static ModConfig getInstance() { return INSTANCE; }
 

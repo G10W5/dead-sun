@@ -2,6 +2,7 @@ package com.example.deadsun.spawn;
 
 import com.example.deadsun.DeadSunMod;
 import com.example.deadsun.awareness.AlphaZombieHandler;
+import com.example.deadsun.awareness.FlankingHandler;
 import com.example.deadsun.awareness.HordeHandler;
 import com.example.deadsun.awareness.LightTrackingHandler;
 import com.example.deadsun.awareness.SoundTrackingHandler;
@@ -38,6 +39,7 @@ public class ZombieSpawnHandler {
         SoundTrackingHandler.tick(level);
         HordeHandler.tick(level);
         LightTrackingHandler.tick(level);
+        FlankingHandler.tick(level);
 
         int interval = ModConfig.getTicksBetweenSpawnsValue();
         tickCounter++;

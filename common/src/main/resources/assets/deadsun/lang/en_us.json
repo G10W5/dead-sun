@@ -92,5 +92,20 @@
     "config.deadsun.alphaScale": "Alpha Scale",
     "config.deadsun.alphaScale.tooltip": "Size multiplier for Alpha Zombies (1.0 = normal, 1.5 = 50% bigger)",
     "config.deadsun.alphaAttackDamage": "Alpha Attack Damage",
-    "config.deadsun.alphaAttackDamage.tooltip": "Attack damage of Alpha Zombies (3.0-20.0)"
+    "config.deadsun.alphaAttackDamage.tooltip": "Attack damage of Alpha Zombies (3.0-20.0)",
+    "config.deadsun.subcat.flanking": "Coordinated Flanking",
+    "config.deadsun.coordinatedFlanking": "Coordinated Flanking",
+    "config.deadsun.coordinatedFlanking.tooltip": "Zombies spread out and approach from different angles instead of all beelining the same path",
+    "config.deadsun.flankingUpdateInterval": "Update Interval",
+    "config.deadsun.flankingUpdateInterval.tooltip": "Ticks between flanking recalculation (5-40)",
+    "config.deadsun.flankingRange": "Flanking Range",
+    "config.deadsun.flankingRange.tooltip": "How far from the player to look for flanking zombies (16-64 blocks)",
+    "config.deadsun.flankingMinGroupSize": "Min Group Size",
+    "config.deadsun.flankingMinGroupSize.tooltip": "Minimum zombies targeting a player before flanking activates (2-8)",
+    "config.deadsun.flankingRadius": "Flanking Radius",
+    "config.deadsun.flankingRadius.tooltip": "Distance from the player where flank points are placed (2.0-16.0)",
+    "config.deadsun.flankingEngageDistance": "Engage Distance",
+    "config.deadsun.flankingEngageDistance.tooltip": "Distance at which zombies stop flanking and use normal melee AI (1.0-8.0)",
+    "config.deadsun.flankingNavSpeed": "Nav Speed",
+    "config.deadsun.flankingNavSpeed.tooltip": "Speed at which zombies navigate to their flank point (0.5-2.0)"
 }

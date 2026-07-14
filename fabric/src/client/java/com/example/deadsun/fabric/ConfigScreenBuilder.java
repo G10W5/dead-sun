@@ -182,6 +182,30 @@ public class ConfigScreenBuilder {
                 .setTooltip(Component.translatable("config.deadsun.alphaAttackDamage.tooltip")).build());
         general.addEntry(alphaSub.build());
 
+        SubCategoryBuilder flankSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.flanking"));
+        flankSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.coordinatedFlanking"), config.isCoordinatedFlanking())
+                .setDefaultValue(true).setSaveConsumer(config::setCoordinatedFlanking)
+                .setTooltip(Component.translatable("config.deadsun.coordinatedFlanking.tooltip")).build());
+        flankSub.add(entry.startIntSlider(Component.translatable("config.deadsun.flankingUpdateInterval"), config.getFlankingUpdateInterval(), 5, 40)
+                .setDefaultValue(10).setSaveConsumer(config::setFlankingUpdateInterval)
+                .setTooltip(Component.translatable("config.deadsun.flankingUpdateInterval.tooltip")).build());
+        flankSub.add(entry.startIntSlider(Component.translatable("config.deadsun.flankingRange"), config.getFlankingRange(), 16, 64)
+                .setDefaultValue(32).setSaveConsumer(config::setFlankingRange)
+                .setTooltip(Component.translatable("config.deadsun.flankingRange.tooltip")).build());
+        flankSub.add(entry.startIntSlider(Component.translatable("config.deadsun.flankingMinGroupSize"), config.getFlankingMinGroupSize(), 2, 8)
+                .setDefaultValue(3).setSaveConsumer(config::setFlankingMinGroupSize)
+                .setTooltip(Component.translatable("config.deadsun.flankingMinGroupSize.tooltip")).build());
+        flankSub.add(entry.startFloatField(Component.translatable("config.deadsun.flankingRadius"), (float) config.getFlankingRadius())
+                .setDefaultValue(6.0f).setMin(2.0f).setMax(16.0f).setSaveConsumer(v -> config.setFlankingRadius(v))
+                .setTooltip(Component.translatable("config.deadsun.flankingRadius.tooltip")).build());
+        flankSub.add(entry.startFloatField(Component.translatable("config.deadsun.flankingEngageDistance"), (float) config.getFlankingEngageDistance())
+                .setDefaultValue(4.0f).setMin(1.0f).setMax(8.0f).setSaveConsumer(v -> config.setFlankingEngageDistance(v))
+                .setTooltip(Component.translatable("config.deadsun.flankingEngageDistance.tooltip")).build());
+        flankSub.add(entry.startFloatField(Component.translatable("config.deadsun.flankingNavSpeed"), (float) config.getFlankingNavSpeed())
+                .setDefaultValue(1.0f).setMin(0.5f).setMax(2.0f).setSaveConsumer(v -> config.setFlankingNavSpeed(v))
+                .setTooltip(Component.translatable("config.deadsun.flankingNavSpeed.tooltip")).build());
+        general.addEntry(flankSub.build());
+
         return builder.build();
     }
 }
