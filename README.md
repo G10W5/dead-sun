@@ -128,7 +128,7 @@ The mod ships with a JSON config at `config/deadsun.json`. All values can be cha
 ## Installation
 
 1. Install [Fabric](https://fabricmc.net/) or [NeoForge](https://neoforged.net/) for Minecraft 26.2
-2. Place the universal JAR (`DeadSun-1.1.1-universal.jar`) into your `mods` folder
+2. Place the universal JAR (`DeadSun-1.2.0-universal.jar`) into your `mods` folder
 3. Optionally install [Mod Menu](https://modrinth.com/mod/modmenu) and [Cloth Config](https://modrinth.com/mod/cloth-config) for the in-game settings screen
 
 The same JAR works on both Fabric and NeoForge.

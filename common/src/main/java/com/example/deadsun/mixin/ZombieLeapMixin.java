@@ -27,6 +27,9 @@ public abstract class ZombieLeapMixin {
     @Unique
     private int deadsun$pileUpCooldown = 0;
 
+    @Unique
+    private int deadsun$stuckTicks = 0;
+
     @Inject(method = "tick", at = @At("RETURN"))
     private void deadsun$zombieTick(CallbackInfo ci) {
         Zombie self = (Zombie) (Object) this;
@@ -80,14 +83,27 @@ public abstract class ZombieLeapMixin {
 
         BlockPos front = self.blockPosition().offset(
                 (int) Math.round(dirX), 0, (int) Math.round(dirZ));
-        boolean wallAhead = level.getBlockState(front).blocksMotion();
 
-        if (!wallAhead) return;
+        int wallHeight = deadsun$wallHeight(level, front);
+        if (wallHeight < 2) {
+            deadsun$stuckTicks = 0;
+            return;
+        }
+
+        if (!self.horizontalCollision) {
+            deadsun$stuckTicks = 0;
+            return;
+        }
+
+        deadsun$stuckTicks++;
+        if (deadsun$stuckTicks < 6) return;
+        deadsun$stuckTicks = 0;
 
         int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) self.getX(), (int) self.getZ());
         if (self.getY() > surfaceY + 4) return;
 
-        float rand = 0.18f + self.getRandom().nextFloat() * 0.06f;
+        float boostBase = 0.18f + (wallHeight - 2) * 0.04f;
+        float rand = boostBase + self.getRandom().nextFloat() * 0.06f;
 
         self.setDeltaMovement(
                 self.getDeltaMovement().x() + (rand / 15) * (self.getRandom().nextFloat() * 2 - 1),
@@ -98,7 +114,20 @@ public abstract class ZombieLeapMixin {
         self.hurtMarked = true;
         self.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 8, 0, false, false));
 
-        deadsun$pileUpCooldown = 4 + self.getRandom().nextInt(6);
+        deadsun$pileUpCooldown = 10 + self.getRandom().nextInt(10);
+    }
+
+    @Unique
+    private static int deadsun$wallHeight(ServerLevel level, BlockPos front) {
+        int height = 0;
+        for (int i = 0; i < 3; i++) {
+            if (level.getBlockState(front.above(i)).blocksMotion()) {
+                height++;
+            } else {
+                break;
+            }
+        }
+        return height;
     }
 
     @Unique
