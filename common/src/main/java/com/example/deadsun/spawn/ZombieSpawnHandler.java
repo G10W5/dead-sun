@@ -159,7 +159,7 @@ public class ZombieSpawnHandler {
 
             int spawnY;
             if (isNether) {
-                int netherCeiling = 125;
+                int netherCeiling = level.dimensionType().logicalHeight() + level.getMinY() - 3;
                 int startY = Math.min(netherCeiling, (int) player.getY() + 16);
                 spawnY = findGroundY(level, x, z, startY, true);
                 if (spawnY < level.getMinY() + 1) continue;
@@ -167,7 +167,6 @@ public class ZombieSpawnHandler {
                 spawnY = findSurfaceGroundY(level, x, z);
                 if (spawnY < 0) continue;
             } else {
-                if (player.getY() < 0) continue;
                 int startY = (int) player.getY() + 4;
                 int endY = Math.max(1, level.getMinY() + 1);
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
@@ -179,7 +178,8 @@ public class ZombieSpawnHandler {
             if (isEnd && !level.canSeeSky(pos)) continue;
             BlockState below = level.getBlockState(pos.below());
             BlockState at = level.getBlockState(pos);
-            if (!below.blocksMotion() || at.blocksMotion() || !at.getFluidState().isEmpty()) {
+            BlockState above = level.getBlockState(pos.above());
+            if (!below.blocksMotion() || at.blocksMotion() || above.blocksMotion() || !at.getFluidState().isEmpty()) {
                 continue;
             }
             if (!checkBlockLight(level, pos)) continue;
@@ -215,7 +215,7 @@ public class ZombieSpawnHandler {
 
     private static int findGroundY(ServerLevel level, int x, int z, int startY, boolean isNether) {
         int heightmapY = isNether
-                ? Math.min(level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), 125)
+                ? Math.min(level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), level.dimensionType().logicalHeight() + level.getMinY() - 3)
                 : level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
 
         int fromY = Math.min(startY, heightmapY);
