@@ -56,7 +56,12 @@ public class FlankingHandler {
         for (int i = 0; i < count; i++) {
             Zombie zombie = attackers.get(i);
 
-            double distToTarget = zombie.position().distanceTo(targetPos);
+            double heightDiff = target.getY() - zombie.getY();
+            if (heightDiff > 3.0) continue;
+
+            double dx = zombie.getX() - targetPos.x;
+            double dz = zombie.getZ() - targetPos.z;
+            double distToTarget = Math.sqrt(dx * dx + dz * dz);
             if (distToTarget <= engageDistance) continue;
 
             double angle = (2 * Math.PI * i) / count;
