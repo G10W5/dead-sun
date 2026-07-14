@@ -28,6 +28,8 @@ dependencies {
 
     common(project(path: ":common")) { transitive = false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+
+    compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
 }
 
 processResources {

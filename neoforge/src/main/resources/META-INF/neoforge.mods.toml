@@ -25,3 +25,15 @@ config="deadsun.mixins.json"
     versionRange="[26.2,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="cloth_config"
+    type="optional"
+    versionRange="[16.0.0,)"
+    ordering="AFTER"
+    side="CLIENT"
+
+[[extensions.${mod_id}]]
+    modId="cloth-config"
+    type="optional"
+    side="CLIENT"

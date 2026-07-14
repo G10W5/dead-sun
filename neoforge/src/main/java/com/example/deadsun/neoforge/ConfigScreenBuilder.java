@@ -1,4 +1,4 @@
-package com.example.deadsun.fabric;
+package com.example.deadsun.neoforge;
 
 import com.example.deadsun.config.ModConfig;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
