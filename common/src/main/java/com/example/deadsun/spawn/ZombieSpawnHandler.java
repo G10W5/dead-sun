@@ -24,6 +24,8 @@ import java.util.List;
 
 public class ZombieSpawnHandler {
 
+    private static final int NOT_FOUND = Integer.MIN_VALUE;
+
     private static int tickCounter = 0;
 
     @SuppressWarnings("unchecked")
@@ -139,7 +141,7 @@ public class ZombieSpawnHandler {
             int gz = center.getZ() + (int) offZ;
 
             int groundY = findGroundY(level, gx, gz, center.getY(), isNether);
-            if (groundY < 0) continue;
+            if (groundY == NOT_FOUND) continue;
 
             BlockPos gpos = new BlockPos(gx, groundY + 1, gz);
             if (isValidSpawnPos(level, gpos) && !checkBlockLight(level, gpos) && !isNearbyTorch(level, gpos)) {
@@ -162,15 +164,15 @@ public class ZombieSpawnHandler {
                 int netherCeiling = level.dimensionType().logicalHeight() + level.getMinY() - 3;
                 int startY = Math.min(netherCeiling, (int) player.getY() + 16);
                 spawnY = findGroundY(level, x, z, startY, true);
-                if (spawnY < level.getMinY() + 1) continue;
+                if (spawnY == NOT_FOUND) continue;
             } else if (playerOnSurface) {
                 spawnY = findSurfaceGroundY(level, x, z);
-                if (spawnY < 0) continue;
+                if (spawnY == NOT_FOUND) continue;
             } else {
                 int startY = (int) player.getY() + 4;
-                int endY = Math.max(1, level.getMinY() + 1);
+                int endY = level.getMinY() + 1;
                 spawnY = findCaveGroundY(level, x, z, startY, endY);
-                if (spawnY < 0) continue;
+                if (spawnY == NOT_FOUND) continue;
             }
 
             BlockPos pos = new BlockPos(x, spawnY + 1, z);
@@ -198,7 +200,7 @@ public class ZombieSpawnHandler {
                 return y;
             }
         }
-        return -1;
+        return NOT_FOUND;
     }
 
     private static int findCaveGroundY(ServerLevel level, int x, int z, int startY, int endY) {
@@ -210,7 +212,7 @@ public class ZombieSpawnHandler {
                 return y - 1;
             }
         }
-        return -1;
+        return NOT_FOUND;
     }
 
     private static int findGroundY(ServerLevel level, int x, int z, int startY, boolean isNether) {
@@ -227,7 +229,7 @@ public class ZombieSpawnHandler {
                 return y;
             }
         }
-        return -1;
+        return NOT_FOUND;
     }
 
     private static boolean isValidSpawnPos(ServerLevel level, BlockPos pos) {
@@ -267,9 +269,6 @@ public class ZombieSpawnHandler {
                 level.getRandom().nextFloat() * 360.0f, 0.0f);
         zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(pos),
                 EntitySpawnReason.NATURAL, null);
-        if (!ModConfig.isAllowBabyZombiesValue()) {
-            zombie.setBaby(false);
-        }
         if (AlphaZombieHandler.shouldSpawnAlpha(level)) {
             AlphaZombieHandler.markAsAlpha(zombie);
         }

@@ -10,6 +10,7 @@
         "PlayerActivityMixin",
         "SpawnPlacementsMixin",
         "MobSunMixin",
+        "ZombieMixin",
         "ZombieLeapMixin",
         "LivingEntityMixin"
     ],
