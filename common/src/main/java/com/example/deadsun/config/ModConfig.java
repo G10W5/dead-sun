@@ -28,6 +28,12 @@ public class ModConfig {
     private float leapStrength = 0.6f;
     private float leapHeight = 0.4f;
     private int leapCooldown = 120;
+    private int pileUpMinGroupSize = 3;
+    private float climbSpeedMin = 0.12f;
+    private float climbSpeedMax = 0.22f;
+    private float climbStepMin = 1.6f;
+    private float climbStepMax = 2.1f;
+    private int maxWallScan = 8;
     private int maxZombiesOverworld = 50;
     private int maxZombiesEnd = 150;
     private int maxZombiesNether = 100;
@@ -91,6 +97,12 @@ public class ModConfig {
     public float getLeapStrength() { return leapStrength; }
     public float getLeapHeight() { return leapHeight; }
     public int getLeapCooldown() { return leapCooldown; }
+    public int getPileUpMinGroupSize() { return pileUpMinGroupSize; }
+    public float getClimbSpeedMin() { return climbSpeedMin; }
+    public float getClimbSpeedMax() { return climbSpeedMax; }
+    public float getClimbStepMin() { return climbStepMin; }
+    public float getClimbStepMax() { return climbStepMax; }
+    public int getMaxWallScan() { return maxWallScan; }
     public int getMaxZombiesOverworld() { return maxZombiesOverworld; }
     public int getMaxZombiesEnd() { return maxZombiesEnd; }
     public int getMaxZombiesNether() { return maxZombiesNether; }
@@ -142,6 +154,12 @@ public class ModConfig {
     public void setLeapStrength(float v) { this.leapStrength = v; }
     public void setLeapHeight(float v) { this.leapHeight = v; }
     public void setLeapCooldown(int v) { this.leapCooldown = v; }
+    public void setPileUpMinGroupSize(int v) { this.pileUpMinGroupSize = v; }
+    public void setClimbSpeedMin(float v) { this.climbSpeedMin = v; }
+    public void setClimbSpeedMax(float v) { this.climbSpeedMax = v; }
+    public void setClimbStepMin(float v) { this.climbStepMin = v; }
+    public void setClimbStepMax(float v) { this.climbStepMax = v; }
+    public void setMaxWallScan(int v) { this.maxWallScan = v; }
     public void setMaxZombiesOverworld(int v) { this.maxZombiesOverworld = v; }
     public void setMaxZombiesEnd(int v) { this.maxZombiesEnd = v; }
     public void setMaxZombiesNether(int v) { this.maxZombiesNether = v; }
@@ -193,6 +211,12 @@ public class ModConfig {
     public static float getLeapStrengthValue() { return INSTANCE.leapStrength; }
     public static float getLeapHeightValue() { return INSTANCE.leapHeight; }
     public static int getLeapCooldownValue() { return INSTANCE.leapCooldown; }
+    public static int getPileUpMinGroupSizeValue() { return INSTANCE.pileUpMinGroupSize; }
+    public static float getClimbSpeedMinValue() { return INSTANCE.climbSpeedMin; }
+    public static float getClimbSpeedMaxValue() { return INSTANCE.climbSpeedMax; }
+    public static float getClimbStepMinValue() { return INSTANCE.climbStepMin; }
+    public static float getClimbStepMaxValue() { return INSTANCE.climbStepMax; }
+    public static int getMaxWallScanValue() { return INSTANCE.maxWallScan; }
     public static int getMaxZombiesOverworldValue() { return INSTANCE.maxZombiesOverworld; }
     public static int getMaxZombiesEndValue() { return INSTANCE.maxZombiesEnd; }
     public static int getMaxZombiesNetherValue() { return INSTANCE.maxZombiesNether; }

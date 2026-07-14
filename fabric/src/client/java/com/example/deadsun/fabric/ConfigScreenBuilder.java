@@ -95,6 +95,24 @@ public class ConfigScreenBuilder {
         behavSub.add(entry.startIntSlider(Component.translatable("config.deadsun.leapCooldown"), config.getLeapCooldown(), 20, 400)
                 .setDefaultValue(120).setSaveConsumer(config::setLeapCooldown)
                 .setTooltip(Component.translatable("config.deadsun.leapCooldown.tooltip")).build());
+        behavSub.add(entry.startIntSlider(Component.translatable("config.deadsun.pileUpMinGroupSize"), config.getPileUpMinGroupSize(), 2, 8)
+                .setDefaultValue(3).setSaveConsumer(config::setPileUpMinGroupSize)
+                .setTooltip(Component.translatable("config.deadsun.pileUpMinGroupSize.tooltip")).build());
+        behavSub.add(entry.startFloatField(Component.translatable("config.deadsun.climbSpeedMin"), config.getClimbSpeedMin())
+                .setDefaultValue(0.12f).setMin(0.05f).setMax(0.3f).setSaveConsumer(config::setClimbSpeedMin)
+                .setTooltip(Component.translatable("config.deadsun.climbSpeedMin.tooltip")).build());
+        behavSub.add(entry.startFloatField(Component.translatable("config.deadsun.climbSpeedMax"), config.getClimbSpeedMax())
+                .setDefaultValue(0.22f).setMin(0.1f).setMax(0.5f).setSaveConsumer(config::setClimbSpeedMax)
+                .setTooltip(Component.translatable("config.deadsun.climbSpeedMax.tooltip")).build());
+        behavSub.add(entry.startFloatField(Component.translatable("config.deadsun.climbStepMin"), config.getClimbStepMin())
+                .setDefaultValue(1.6f).setMin(0.5f).setMax(3.0f).setSaveConsumer(config::setClimbStepMin)
+                .setTooltip(Component.translatable("config.deadsun.climbStepMin.tooltip")).build());
+        behavSub.add(entry.startFloatField(Component.translatable("config.deadsun.climbStepMax"), config.getClimbStepMax())
+                .setDefaultValue(2.1f).setMin(1.0f).setMax(4.0f).setSaveConsumer(config::setClimbStepMax)
+                .setTooltip(Component.translatable("config.deadsun.climbStepMax.tooltip")).build());
+        behavSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxWallScan"), config.getMaxWallScan(), 2, 16)
+                .setDefaultValue(8).setSaveConsumer(config::setMaxWallScan)
+                .setTooltip(Component.translatable("config.deadsun.maxWallScan.tooltip")).build());
         general.addEntry(behavSub.build());
 
         // === Subcategory: Torch Safety ===
