@@ -168,12 +168,15 @@ public class ZombieVariantHandler {
         int entityId = zombie.getId();
         boolean alreadyFusing = FUSE_TIMERS.containsKey(entityId);
 
-        if (dist <= 3.0 && !alreadyFusing) {
+        boolean canSee = zombie.hasLineOfSight(nearest);
+        boolean inRange = dist <= 3.0;
+
+        if (inRange && canSee && !alreadyFusing) {
             FUSE_TIMERS.put(entityId, ModConfig.getExploderFuseTimeValue());
             zombie.playSound(SoundEvents.TNT_PRIMED, 1.0f, 1.0f);
         }
 
-        if (alreadyFusing || dist <= 3.0) {
+        if (alreadyFusing || (inRange && canSee)) {
             int fuse = FUSE_TIMERS.getOrDefault(entityId, ModConfig.getExploderFuseTimeValue());
             fuse--;
             FUSE_TIMERS.put(entityId, fuse);

@@ -227,7 +227,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(3.0f).setMin(1.0f).setMax(8.0f).setSaveConsumer(config::setExploderExplosionRadius)
                 .setTooltip(Component.translatable("config.deadsun.exploderExplosionRadius.tooltip")).build());
         variantSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.exploderDestroysBlocks"), config.isExploderDestroysBlocks())
-                .setDefaultValue(true).setSaveConsumer(config::setExploderDestroysBlocks)
+                .setDefaultValue(false).setSaveConsumer(config::setExploderDestroysBlocks)
                 .setTooltip(Component.translatable("config.deadsun.exploderDestroysBlocks.tooltip")).build());
         variantSub.add(entry.startFloatField(Component.translatable("config.deadsun.bruteChance"), config.getBruteChance())
                 .setDefaultValue(0.03f).setMin(0.0f).setMax(0.5f).setSaveConsumer(config::setBruteChance)

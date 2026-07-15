@@ -84,7 +84,7 @@ public class ModConfig {
     private int bruteStrengthLevel = 1;
     private int exploderFuseTime = 40;
     private float exploderExplosionRadius = 3.0f;
-    private boolean exploderDestroysBlocks = true;
+    private boolean exploderDestroysBlocks = false;
 
     // --- New fields: Coordinated Flanking ---
     private boolean coordinatedFlanking = true;
