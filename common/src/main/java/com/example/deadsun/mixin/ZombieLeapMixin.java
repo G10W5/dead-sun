@@ -6,12 +6,15 @@ import com.example.deadsun.awareness.NoisyZombieHandler;
 import com.example.deadsun.awareness.ZombieVariantHandler;
 import com.example.deadsun.config.ModConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -40,6 +43,9 @@ public abstract class ZombieLeapMixin {
     @Unique private double deadsun$crestDirX = 0;
     @Unique private double deadsun$crestDirZ = 0;
 
+    @Unique private boolean deadsun$wasCrawling = false;
+    @Unique private boolean deadsun$wasSwimming = false;
+
     @Inject(method = "tick", at = @At("RETURN"))
     private void deadsun$zombieTick(CallbackInfo ci) {
         Zombie self = (Zombie) (Object) this;
@@ -50,6 +56,8 @@ public abstract class ZombieLeapMixin {
 
         deadsun$tryLeap(self, level);
         deadsun$tryPileUp(self, level);
+        deadsun$tryCrawl(self, level);
+        deadsun$trySwim(self, level);
 
         LightTrackingHandler.tick(level, self);
         NoisyZombieHandler.tick(level, self);
@@ -258,6 +266,54 @@ public abstract class ZombieLeapMixin {
             }
         }
         return height;
+    }
+
+    @Unique
+    private void deadsun$tryCrawl(Zombie self, ServerLevel level) {
+        if (!ModConfig.isZombieCrawlingValue()) return;
+        if (deadsun$isClimbing) return;
+
+        boolean hasTarget = self.getTarget() != null;
+        BlockPos above = self.blockPosition().above(2);
+        boolean ceilingAbove = level.getBlockState(above).blocksMotion();
+        boolean feetPassable = !level.getBlockState(self.blockPosition()).blocksMotion();
+        boolean headClear = !level.getBlockState(self.blockPosition().above()).blocksMotion();
+
+        if (hasTarget && ceilingAbove && feetPassable && self.onGround()) {
+            if (self.getPose() != Pose.SWIMMING) {
+                self.setPose(Pose.SWIMMING);
+                deadsun$wasCrawling = true;
+            }
+        } else if (deadsun$wasCrawling && headClear) {
+            self.setPose(Pose.STANDING);
+            deadsun$wasCrawling = false;
+        }
+    }
+
+    @Unique
+    private void deadsun$trySwim(Zombie self, ServerLevel level) {
+        if (!ModConfig.isZombieSwimmingValue()) return;
+        if (deadsun$isClimbing) return;
+
+        boolean inWater = self.isInWater();
+        boolean hasTarget = self.getTarget() != null;
+
+        if (inWater && hasTarget) {
+            BlockPos feet = self.blockPosition();
+            boolean feetWater = level.getFluidState(feet).is(FluidTags.WATER);
+            boolean aboveWater = level.getFluidState(feet.above()).is(FluidTags.WATER);
+            boolean shallowWater = feetWater && !aboveWater;
+
+            if (shallowWater) {
+                if (self.getPose() != Pose.SWIMMING) {
+                    self.setPose(Pose.SWIMMING);
+                    deadsun$wasSwimming = true;
+                }
+            }
+        } else if (deadsun$wasSwimming && !inWater) {
+            self.setPose(Pose.STANDING);
+            deadsun$wasSwimming = false;
+        }
     }
 
     @Unique

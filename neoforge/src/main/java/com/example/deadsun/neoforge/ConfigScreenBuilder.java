@@ -30,7 +30,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(128).setSaveConsumer(config::setSpawnRadius)
                 .setTooltip(Component.translatable("config.deadsun.spawnRadius.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.minSpawnDistance"), config.getMinSpawnDistance(), 16, 64)
-                .setDefaultValue(32).setSaveConsumer(config::setMinSpawnDistance)
+                .setDefaultValue(48).setSaveConsumer(config::setMinSpawnDistance)
                 .setTooltip(Component.translatable("config.deadsun.minSpawnDistance.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.ticksBetweenSpawns"), config.getTicksBetweenSpawns(), 1, 40)
                 .setDefaultValue(20).setSaveConsumer(config::setTicksBetweenSpawns)
@@ -42,7 +42,7 @@ public class ConfigScreenBuilder {
                 .setDefaultValue(true).setSaveConsumer(config::setGroupSpawning)
                 .setTooltip(Component.translatable("config.deadsun.groupSpawning.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.minGroupSize"), config.getMinGroupSize(), 2, 6)
-                .setDefaultValue(2).setSaveConsumer(config::setMinGroupSize)
+                .setDefaultValue(3).setSaveConsumer(config::setMinGroupSize)
                 .setTooltip(Component.translatable("config.deadsun.minGroupSize.tooltip")).build());
         spawnSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxGroupSize"), config.getMaxGroupSize(), 4, 16)
                 .setDefaultValue(8).setSaveConsumer(config::setMaxGroupSize)
@@ -55,13 +55,13 @@ public class ConfigScreenBuilder {
         // Dimension Caps
         SubCategoryBuilder dimSub = entry.startSubCategory(Component.translatable("config.deadsun.subcat.dimensions"));
         dimSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxZombiesOverworld"), config.getMaxZombiesOverworld(), 10, 200)
-                .setDefaultValue(50).setSaveConsumer(config::setMaxZombiesOverworld)
+                .setDefaultValue(20).setSaveConsumer(config::setMaxZombiesOverworld)
                 .setTooltip(Component.translatable("config.deadsun.maxZombiesOverworld.tooltip")).build());
         dimSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxZombiesEnd"), config.getMaxZombiesEnd(), 10, 300)
                 .setDefaultValue(150).setSaveConsumer(config::setMaxZombiesEnd)
                 .setTooltip(Component.translatable("config.deadsun.maxZombiesEnd.tooltip")).build());
         dimSub.add(entry.startIntSlider(Component.translatable("config.deadsun.maxZombiesNether"), config.getMaxZombiesNether(), 10, 200)
-                .setDefaultValue(100).setSaveConsumer(config::setMaxZombiesNether)
+                .setDefaultValue(70).setSaveConsumer(config::setMaxZombiesNether)
                 .setTooltip(Component.translatable("config.deadsun.maxZombiesNether.tooltip")).build());
         general.addEntry(dimSub.build());
 
@@ -86,6 +86,12 @@ public class ConfigScreenBuilder {
         behavSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.zombiePileUp"), config.isZombiePileUp())
                 .setDefaultValue(true).setSaveConsumer(config::setZombiePileUp)
                 .setTooltip(Component.translatable("config.deadsun.zombiePileUp.tooltip")).build());
+        behavSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.zombieCrawling"), config.isZombieCrawling())
+                .setDefaultValue(true).setSaveConsumer(config::setZombieCrawling)
+                .setTooltip(Component.translatable("config.deadsun.zombieCrawling.tooltip")).build());
+        behavSub.add(entry.startBooleanToggle(Component.translatable("config.deadsun.zombieSwimming"), config.isZombieSwimming())
+                .setDefaultValue(true).setSaveConsumer(config::setZombieSwimming)
+                .setTooltip(Component.translatable("config.deadsun.zombieSwimming.tooltip")).build());
         behavSub.add(entry.startFloatField(Component.translatable("config.deadsun.leapStrength"), config.getLeapStrength())
                 .setDefaultValue(0.6f).setMin(0.1f).setMax(2.0f).setSaveConsumer(config::setLeapStrength)
                 .setTooltip(Component.translatable("config.deadsun.leapStrength.tooltip")).build());

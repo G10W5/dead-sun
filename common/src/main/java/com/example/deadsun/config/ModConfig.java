@@ -19,12 +19,14 @@ public class ModConfig {
     private int spawnDensity = 50;
     private float enderPearlChance = 0.30f;
     private int spawnRadius = 128;
-    private int minSpawnDistance = 32;
+    private int minSpawnDistance = 48;
     private int ticksBetweenSpawns = 20;
     private int maxBlockLight = -1;
     private boolean requireOpenSky = false;
     private boolean zombieLeap = true;
     private boolean zombiePileUp = true;
+    private boolean zombieCrawling = true;
+    private boolean zombieSwimming = true;
     private float leapStrength = 0.6f;
     private float leapHeight = 0.4f;
     private int leapCooldown = 120;
@@ -34,11 +36,11 @@ public class ModConfig {
     private float climbStepMin = 1.6f;
     private float climbStepMax = 2.1f;
     private int maxWallScan = 8;
-    private int maxZombiesOverworld = 50;
+    private int maxZombiesOverworld = 20;
     private int maxZombiesEnd = 150;
-    private int maxZombiesNether = 100;
+    private int maxZombiesNether = 70;
     private boolean groupSpawning = true;
-    private int minGroupSize = 2;
+    private int minGroupSize = 3;
     private int maxGroupSize = 8;
     private boolean allowBabyZombies = true;
 
@@ -108,6 +110,8 @@ public class ModConfig {
     public boolean isRequireOpenSky() { return requireOpenSky; }
     public boolean isZombieLeap() { return zombieLeap; }
     public boolean isZombiePileUp() { return zombiePileUp; }
+    public boolean isZombieCrawling() { return zombieCrawling; }
+    public boolean isZombieSwimming() { return zombieSwimming; }
     public float getLeapStrength() { return leapStrength; }
     public float getLeapHeight() { return leapHeight; }
     public int getLeapCooldown() { return leapCooldown; }
@@ -177,6 +181,8 @@ public class ModConfig {
     public void setRequireOpenSky(boolean v) { this.requireOpenSky = v; }
     public void setZombieLeap(boolean v) { this.zombieLeap = v; }
     public void setZombiePileUp(boolean v) { this.zombiePileUp = v; }
+    public void setZombieCrawling(boolean v) { this.zombieCrawling = v; }
+    public void setZombieSwimming(boolean v) { this.zombieSwimming = v; }
     public void setLeapStrength(float v) { this.leapStrength = v; }
     public void setLeapHeight(float v) { this.leapHeight = v; }
     public void setLeapCooldown(int v) { this.leapCooldown = v; }
@@ -246,6 +252,8 @@ public class ModConfig {
     public static float getEnderPearlChanceValue() { return INSTANCE.enderPearlChance; }
     public static boolean isZombieLeapValue() { return INSTANCE.zombieLeap; }
     public static boolean isZombiePileUpValue() { return INSTANCE.zombiePileUp; }
+    public static boolean isZombieCrawlingValue() { return INSTANCE.zombieCrawling; }
+    public static boolean isZombieSwimmingValue() { return INSTANCE.zombieSwimming; }
     public static float getLeapStrengthValue() { return INSTANCE.leapStrength; }
     public static float getLeapHeightValue() { return INSTANCE.leapHeight; }
     public static int getLeapCooldownValue() { return INSTANCE.leapCooldown; }

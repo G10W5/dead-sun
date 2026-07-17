@@ -18,6 +18,7 @@ import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -257,7 +258,8 @@ public class ZombieSpawnHandler {
                     BlockState state = level.getBlockState(pos.offset(x, y, z));
                     if (state.is(Blocks.TORCH) || state.is(Blocks.WALL_TORCH)
                             || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)
-                            || state.is(Blocks.COPPER_TORCH) || state.is(Blocks.COPPER_WALL_TORCH)) {
+                            || state.is(Blocks.COPPER_TORCH) || state.is(Blocks.COPPER_WALL_TORCH)
+                            || state.getBlock() instanceof LanternBlock) {
                         return true;
                     }
                 }

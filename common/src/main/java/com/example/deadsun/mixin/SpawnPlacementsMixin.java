@@ -11,6 +11,7 @@ import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LanternBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,7 +40,8 @@ public abstract class SpawnPlacementsMixin {
                     Block block = level.getBlockState(pos.offset(x, y, z)).getBlock();
                     if (block == Blocks.TORCH || block == Blocks.WALL_TORCH
                             || block == Blocks.SOUL_TORCH || block == Blocks.SOUL_WALL_TORCH
-                            || block == Blocks.COPPER_TORCH || block == Blocks.COPPER_WALL_TORCH) {
+                            || block == Blocks.COPPER_TORCH || block == Blocks.COPPER_WALL_TORCH
+                            || block instanceof LanternBlock) {
                         return true;
                     }
                 }
